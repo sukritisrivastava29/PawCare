@@ -1,120 +1,173 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import ServiceCard from "../components/ServiceCard";
-import ProviderCard from "../components/ProviderCard";
-import { services, providers } from "../data/mockData";
 
-function Home() {
+export default function Home() {
   return (
-    <div>
+    <div className="pawcare-app">
       <Navbar />
 
       <main>
+        {/* HERO */}
         <section className="hero">
-          <div className="container hero-grid">
-            <div>
-              <p className="eyebrow">ANIMAL CARE, CONNECTED</p>
+          <div className="hero-content">
+            <p className="eyebrow">ANIMAL CARE, CONNECTED</p>
 
-              <h1>
-                The right care,
-                <span>when they need it.</span>
-              </h1>
+            <h1>
+              The right care,
+              <br />
+              <span>when they need it.</span>
+            </h1>
 
-              <p className="hero-text">
-                Discover vets, emergency care, rescuers, NGOs and other
-                animal-care services from one simple platform.
-              </p>
+            <p className="hero-description">
+              Discover vets, emergency care, rescuers, NGOs and other
+              animal-care services from one simple platform.
+            </p>
 
-              <div className="hero-actions">
-                <Link to="/search" className="primary-button">
-                  Find care near me
-                </Link>
+            <div className="hero-actions">
+              <Link to="/search" className="primary-btn">
+                Find care near me
+              </Link>
 
-                <Link to="/ai-health" className="text-button">
-                  ✨ Explore AI Health
-                </Link>
-              </div>
-            </div>
-
-            <div className="hero-visual">
-              <div className="animal-art">🐕</div>
-
-              <div className="floating-card">
-                <strong>4.8 ★</strong>
-                <span>Trusted local care</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="container">
-            <div className="section-title">
-              <div>
-                <p className="eyebrow">CARE DIRECTORY</p>
-                <h2>What does your animal need?</h2>
-              </div>
-            </div>
-
-            <div className="services-grid">
-              {services.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  service={service}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section providers-section">
-          <div className="container">
-            <div className="section-title">
-              <div>
-                <p className="eyebrow">NEAR YOU</p>
-                <h2>Trusted care providers</h2>
-              </div>
-
-              <Link to="/search" className="text-button">
-                View all →
+              <Link to="/ai-health" className="ai-btn">
+                ✨ Explore AI Health
               </Link>
             </div>
+          </div>
 
-            <div className="providers-grid">
-              {providers.slice(0, 2).map((provider) => (
-                <ProviderCard
-                  key={provider.id}
-                  provider={provider}
-                />
-              ))}
+          <div className="hero-visual">
+            <div className="hero-circle">
+              <div className="pet-illustration">🐕</div>
+            </div>
+
+            <div className="trust-card">
+              <strong>4.8 ★</strong>
+              <span>Trusted local care</span>
             </div>
           </div>
         </section>
 
-        <section className="ai-banner">
-          <div className="container ai-banner-inner">
-            <div>
-              <p className="eyebrow">AI-POWERED CARE</p>
+        {/* QUICK ACTIONS */}
+        <section className="quick-section">
+          <div className="section-heading">
+            <p className="eyebrow">START HERE</p>
+            <h2>Everything your pet needs.</h2>
+            <p>
+              Find help, manage your pet's information and keep their health
+              records in one place.
+            </p>
+          </div>
 
-              <h2>
-                Turn confusing vet reports into
-                <span>something you can understand.</span>
-              </h2>
-
+          <div className="quick-grid">
+            <Link to="/search" className="quick-card">
+              <div className="card-icon">⌕</div>
+              <h3>Find Care</h3>
               <p>
-                Upload a veterinary report and let AI organise key
-                information into a simple pet-parent summary.
+                Find vets, rescuers, NGOs and pet-care providers around you.
               </p>
-            </div>
+              <span>Explore →</span>
+            </Link>
 
-            <Link to="/ai-health" className="primary-button">
-              Try AI Health →
+            <Link to="/pet" className="quick-card">
+              <div className="card-icon">🐾</div>
+              <h3>My Pet</h3>
+              <p>
+                Keep your pet's profile, important details and care information
+                organized.
+              </p>
+              <span>View profile →</span>
+            </Link>
+
+            <Link to="/health" className="quick-card">
+              <div className="card-icon">♡</div>
+              <h3>Health Record</h3>
+              <p>
+                Track vaccinations, medical history, medications and upcoming
+                care.
+              </p>
+              <span>View records →</span>
+            </Link>
+
+            <Link to="/emergency" className="quick-card emergency-card">
+              <div className="card-icon">+</div>
+              <h3>Emergency</h3>
+              <p>
+                Quickly access emergency veterinary and animal rescue
+                assistance.
+              </p>
+              <span>Get help →</span>
             </Link>
           </div>
         </section>
+
+        {/* AI SECTION */}
+        <section className="ai-section">
+          <div>
+            <p className="eyebrow">SMARTER PET CARE</p>
+
+            <h2>
+              Not sure what
+              <br />
+              your pet needs?
+            </h2>
+
+            <p>
+              Use PawCare's AI-assisted health experience to understand
+              symptoms, prepare questions for a vet and find the right next
+              step.
+            </p>
+
+            <Link to="/ai-health" className="primary-btn">
+              Try AI Health
+            </Link>
+          </div>
+
+          <div className="ai-card">
+            <div className="ai-card-top">
+              <span>✨</span>
+              <strong>PawCare AI</strong>
+            </div>
+
+            <div className="chat-bubble user-bubble">
+              My dog has been scratching a lot today.
+            </div>
+
+            <div className="chat-bubble ai-bubble">
+              I can help you understand possible causes and suggest what
+              information to discuss with a veterinarian.
+            </div>
+
+            <div className="ai-input">
+              <span>Describe your pet's symptoms...</span>
+              <b>→</b>
+            </div>
+          </div>
+        </section>
+
+        {/* PROVIDER CTA */}
+        <section className="provider-section">
+          <div>
+            <p className="eyebrow">LOCAL CARE NETWORK</p>
+            <h2>Good care starts with finding the right people.</h2>
+          </div>
+
+          <Link to="/search" className="outline-btn">
+            Explore providers →
+          </Link>
+        </section>
       </main>
+
+      <footer>
+        <div className="footer-logo">
+          ✦ Paw<span>Care</span>
+        </div>
+
+        <p>
+          A simple digital platform connecting pet owners with animal-care
+          services.
+        </p>
+
+        <span>© 2026 PawCare</span>
+      </footer>
     </div>
   );
 }
-
-export default Home;
