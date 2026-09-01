@@ -1,27 +1,37 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-function Navbar() {
+export default function Navbar() {
+  const location = useLocation();
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Find Care", path: "/search" },
+    { name: "My Pet", path: "/pet" },
+    { name: "Health Record", path: "/health" },
+  ];
+
   return (
     <header className="navbar">
-      <div className="nav-container">
-        <Link to="/" className="logo">
-          <span className="logo-mark">P</span>
-          PawCare
-        </Link>
+      <Link to="/" className="logo">
+        <span className="logo-paw">✦</span>
+        Paw<span>Care</span>
+      </Link>
 
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/search">Find Care</Link>
-          <Link to="/pet">My Pet</Link>
-          <Link to="/health-record">Health Record</Link>
-        </nav>
+      <nav className="nav-links">
+        {navItems.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={location.pathname === item.path ? "active" : ""}
+          >
+            {item.name}
+          </Link>
+        ))}
+      </nav>
 
-        <Link to="/emergency" className="emergency-btn">
-          Emergency
-        </Link>
-      </div>
+      <Link to="/emergency" className="emergency-nav">
+        Emergency
+      </Link>
     </header>
   );
 }
-
-export default Navbar;
