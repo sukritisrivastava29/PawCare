@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import BottomNav from "../components/SearchBar";
 import { providers } from "../data/mockData";
 
 function Provider() {
@@ -11,98 +10,75 @@ function Provider() {
   );
 
   if (!provider) {
-    return (
-      <div className="page">
-        <Navbar />
-
-        <div className="container not-found">
-          <h1>Provider not found</h1>
-          <Link to="/search" className="button primary">
-            Back to search
-          </Link>
-        </div>
-      </div>
-    );
+    return <div>Provider not found.</div>;
   }
 
   return (
-    <div className="page">
+    <div>
       <Navbar />
 
       <main className="provider-page">
         <div className="container">
           <Link to="/search" className="back-link">
-            ← Back to providers
+            ← Back to search
           </Link>
 
-          <div className="provider-detail">
-            <div className="provider-large-image">
-              {provider.image}
+          <div className="provider-hero">
+            <div className="large-provider-icon">
+              {provider.icon}
             </div>
 
             <div>
-              <span className={provider.open ? "status open" : "status closed"}>
-                {provider.open ? "Open now" : "Closed"}
-              </span>
+              <span className="open">● Open now</span>
 
               <h1>{provider.name}</h1>
 
-              <p className="large-muted">{provider.type}</p>
+              <p>{provider.type}</p>
 
-              <div className="rating-large">
+              <div className="large-rating">
                 ★ {provider.rating}
                 <span>({provider.reviews} reviews)</span>
               </div>
 
-              <p className="detail-location">
-                📍 {provider.location}
-              </p>
+              <p>📍 {provider.location}</p>
 
-              <p className="detail-phone">
-                📞 {provider.phone}
-              </p>
+              <p>📞 {provider.phone}</p>
             </div>
           </div>
 
-          <div className="provider-sections">
-            <section className="detail-card">
+          <div className="provider-detail-grid">
+            <section className="detail-box">
               <p className="eyebrow">SERVICES</p>
-              <h2>Available services</h2>
 
-              <div className="tag-list">
-                {provider.services.map((item) => (
-                  <span key={item}>{item}</span>
+              <h2>Available care</h2>
+
+              <div className="tags">
+                {provider.services.map((service) => (
+                  <span key={service}>{service}</span>
                 ))}
               </div>
             </section>
 
-            <section className="detail-card">
+            <section className="detail-box">
               <p className="eyebrow">CONTACT</p>
-              <h2>Get in touch</h2>
+
+              <h2>Need help?</h2>
 
               <p>
-                Contact this provider directly for appointments,
-                availability and additional information.
+                Contact this provider for appointments,
+                availability and animal-care support.
               </p>
 
-              <div className="detail-actions">
-                <a
-                  href={`tel:${provider.phone}`}
-                  className="button primary"
-                >
-                  Call provider
-                </a>
-
-                <Link to="/emergency" className="button secondary">
-                  Emergency care
-                </Link>
-              </div>
+              <a
+                href={`tel:${provider.phone}`}
+                className="primary-button"
+              >
+                Call provider
+              </a>
             </section>
           </div>
         </div>
       </main>
-
-      <BottomNav />
     </div>
   );
 }
