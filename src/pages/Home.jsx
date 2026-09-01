@@ -1,69 +1,47 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-
-const services = [
-  {
-    icon: "🩺",
-    title: "Veterinary Care",
-    text: "Find veterinary services and care for your pet's health needs."
-  },
-  {
-    icon: "✂️",
-    title: "Grooming",
-    text: "Discover grooming and everyday pet-care services."
-  },
-  {
-    icon: "💉",
-    title: "Vaccination",
-    text: "Keep track of essential vaccinations and health needs."
-  },
-  {
-    icon: "📋",
-    title: "Health Records",
-    text: "Keep your pet's important health information organized."
-  }
-];
+import ServiceCard from "../components/ServiceCard";
+import ProviderCard from "../components/ProviderCard";
+import { services, providers } from "../data/mockData";
 
 function Home() {
   return (
-    <div className="page">
+    <div>
       <Navbar />
 
       <main>
         <section className="hero">
           <div className="container hero-grid">
             <div>
-              <p className="section-label">Pet care, simplified</p>
+              <p className="eyebrow">ANIMAL CARE, CONNECTED</p>
 
               <h1>
-                Better care for
-                <span> every paw.</span>
+                The right care,
+                <span>when they need it.</span>
               </h1>
 
               <p className="hero-text">
-                Discover pet-care services, connect with providers and keep
-                your pet's important health information in one place.
+                Discover vets, emergency care, rescuers, NGOs and other
+                animal-care services from one simple platform.
               </p>
 
               <div className="hero-actions">
-                <Link to="/search" className="btn btn-primary">
-                  Find Pet Care
+                <Link to="/search" className="primary-button">
+                  Find care near me
                 </Link>
 
-                <Link to="/pet" className="text-link">
-                  View my pet →
+                <Link to="/ai-health" className="text-button">
+                  ✨ Explore AI Health
                 </Link>
               </div>
             </div>
 
             <div className="hero-visual">
-              <div className="hero-circle">
-                🐕
-              </div>
+              <div className="animal-art">🐕</div>
 
               <div className="floating-card">
-                <span>✓</span>
-                Care made easier
+                <strong>4.8 ★</strong>
+                <span>Trusted local care</span>
               </div>
             </div>
           </div>
@@ -71,87 +49,66 @@ function Home() {
 
         <section className="section">
           <div className="container">
-            <p className="section-label">Services</p>
-
-            <h2 className="section-title">
-              Everything you need for your pet
-            </h2>
+            <div className="section-title">
+              <div>
+                <p className="eyebrow">CARE DIRECTORY</p>
+                <h2>What does your animal need?</h2>
+              </div>
+            </div>
 
             <div className="services-grid">
               {services.map((service) => (
-                <div className="service-card" key={service.title}>
-                  <div className="service-icon">{service.icon}</div>
-
-                  <h3>{service.title}</h3>
-
-                  <p>{service.text}</p>
-
-                  <Link to="/search">Explore →</Link>
-                </div>
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                />
               ))}
             </div>
           </div>
         </section>
 
-        <section className="section why-section">
-          <div className="container why-grid">
-            <div>
-              <p className="section-label">Why PawCare</p>
+        <section className="section providers-section">
+          <div className="container">
+            <div className="section-title">
+              <div>
+                <p className="eyebrow">NEAR YOU</p>
+                <h2>Trusted care providers</h2>
+              </div>
 
-              <h2 className="section-title">
-                One simple place to manage pet care.
-              </h2>
+              <Link to="/search" className="text-button">
+                View all →
+              </Link>
             </div>
 
-            <div className="benefits">
-              <div className="benefit">
-                <span>01</span>
-                <div>
-                  <h3>Discover providers</h3>
-                  <p>
-                    Search for relevant pet-care services and providers.
-                  </p>
-                </div>
-              </div>
-
-              <div className="benefit">
-                <span>02</span>
-                <div>
-                  <h3>Manage information</h3>
-                  <p>
-                    Keep your pet profile and health information accessible.
-                  </p>
-                </div>
-              </div>
-
-              <div className="benefit">
-                <span>03</span>
-                <div>
-                  <h3>Act quickly in emergencies</h3>
-                  <p>
-                    Get direct access to the emergency-care experience.
-                  </p>
-                </div>
-              </div>
+            <div className="providers-grid">
+              {providers.slice(0, 2).map((provider) => (
+                <ProviderCard
+                  key={provider.id}
+                  provider={provider}
+                />
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="emergency-section">
-          <div className="container emergency-content">
+        <section className="ai-banner">
+          <div className="container ai-banner-inner">
             <div>
-              <p className="section-label">Need urgent help?</p>
+              <p className="eyebrow">AI-POWERED CARE</p>
 
-              <h2>Pet emergency?</h2>
+              <h2>
+                Turn confusing vet reports into
+                <span>something you can understand.</span>
+              </h2>
 
               <p>
-                Quickly access the emergency-care section and find the help
-                you need.
+                Upload a veterinary report and let AI organise key
+                information into a simple pet-parent summary.
               </p>
             </div>
 
-            <Link to="/emergency" className="btn btn-accent">
-              Emergency Care →
+            <Link to="/ai-health" className="primary-button">
+              Try AI Health →
             </Link>
           </div>
         </section>
