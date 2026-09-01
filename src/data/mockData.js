@@ -1,27 +1,33 @@
 export const services = [
   {
     id: 1,
-    name: "Veterinary Care",
+    name: "Find a Vet",
     icon: "🩺",
-    description: "Consult qualified veterinary professionals for your pet."
+    description: "Discover trusted veterinary professionals near you."
   },
   {
     id: 2,
-    name: "Grooming",
-    icon: "✂️",
-    description: "Find grooming services for your pet's everyday needs."
+    name: "Emergency Care",
+    icon: "🚑",
+    description: "Quickly find available emergency animal care."
   },
   {
     id: 3,
-    name: "Vaccination",
-    icon: "💉",
-    description: "Find vaccination and preventive care services."
+    name: "Animal Ambulance",
+    icon: "🚐",
+    description: "Find transportation support for animals."
   },
   {
     id: 4,
-    name: "Pet Pharmacy",
-    icon: "💊",
-    description: "Access medicines and healthcare support for your pet."
+    name: "NGO & Rescuers",
+    icon: "🐾",
+    description: "Connect with animal welfare organisations and rescuers."
+  },
+  {
+    id: 5,
+    name: "Boarding",
+    icon: "🏠",
+    description: "Find boarding and temporary care facilities."
   }
 ];
 
@@ -31,72 +37,38 @@ export const providers = [
     name: "Paws & Care Veterinary Clinic",
     type: "Veterinary Clinic",
     location: "Gurgaon",
+    distance: "1.2 km",
     rating: 4.8,
     reviews: 124,
-    distance: "1.2 km",
-    phone: "+91 98765 43210",
     open: true,
-    image: "🐕",
-    services: ["Veterinary Care", "Vaccination", "Emergency Care"]
+    phone: "+91 98765 43210",
+    icon: "🐕",
+    services: ["Veterinary Care", "Emergency Care", "Vaccination"]
   },
   {
     id: 2,
     name: "Happy Tails Animal Hospital",
     type: "Animal Hospital",
     location: "Gurgaon",
+    distance: "2.4 km",
     rating: 4.7,
     reviews: 98,
-    distance: "2.4 km",
-    phone: "+91 98765 12345",
     open: true,
-    image: "🐈",
+    phone: "+91 98765 12345",
+    icon: "🐈",
     services: ["Veterinary Care", "Surgery", "Vaccination"]
   },
   {
     id: 3,
-    name: "Pet Wellness Centre",
-    type: "Pet Wellness Centre",
+    name: "Gurgaon Animal Rescue",
+    type: "Animal Rescue NGO",
     location: "Gurgaon",
+    distance: "3.1 km",
     rating: 4.6,
     reviews: 76,
-    distance: "3.1 km",
+    open: true,
     phone: "+91 98111 22334",
-    open: false,
-    image: "🐶",
-    services: ["Grooming", "Vaccination", "Pet Wellness"]
-  }
-];
-
-export const pet = {
-  name: "Milo",
-  type: "Dog",
-  breed: "Golden Retriever",
-  age: "3 years",
-  gender: "Male",
-  weight: "28 kg",
-  image: "🐕"
-};
-
-export const healthRecords = [
-  {
-    id: 1,
-    title: "Annual Vaccination",
-    date: "15 August 2026",
-    type: "Vaccination",
-    status: "Completed"
-  },
-  {
-    id: 2,
-    title: "General Health Checkup",
-    date: "02 July 2026",
-    type: "Checkup",
-    status: "Completed"
-  },
-  {
-    id: 3,
-    title: "Rabies Vaccination",
-    date: "15 August 2026",
-    type: "Vaccination",
-    status: "Completed"
+    icon: "🐾",
+    services: ["Rescue", "Animal Ambulance", "NGO"]
   }
 ];
