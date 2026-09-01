@@ -1,17 +1,21 @@
 import { Link } from "react-router-dom";
 
-function ServiceCard({ service }) {
+export default function ServiceCard({ service }) {
   return (
-    <Link to="/search" className="service-card">
-      <div className="service-icon">{service.icon}</div>
+    <Link
+      to={`/search?service=${service.id}`}
+      className="service-card"
+    >
+      <div className="service-icon">
+        {service.icon}
+      </div>
 
-      <h3>{service.name}</h3>
+      <div>
+        <h3>{service.name}</h3>
+        <p>{service.description}</p>
+      </div>
 
-      <p>{service.description}</p>
-
-      <span>Explore →</span>
+      <span className="service-arrow">↗</span>
     </Link>
   );
 }
-
-export default ServiceCard;
