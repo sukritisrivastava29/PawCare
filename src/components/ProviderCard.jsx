@@ -1,35 +1,42 @@
 import { Link } from "react-router-dom";
 
-function ProviderCard({ provider }) {
+export default function ProviderCard({ provider }) {
   return (
     <article className="provider-card">
-      <div className="provider-icon">{provider.icon}</div>
+      <div className="provider-icon">🐾</div>
 
       <div className="provider-content">
-        <small className={provider.open ? "open" : "closed"}>
-          ● {provider.open ? "Open now" : "Closed"}
-        </small>
+        <div className="provider-top">
+          <span className="provider-type">{provider.type}</span>
+
+          {provider.available && (
+            <span className="available">Available</span>
+          )}
+        </div>
 
         <h3>{provider.name}</h3>
 
-        <p>{provider.type}</p>
+        <p className="provider-location">
+          📍 {provider.location} · {provider.distance}
+        </p>
 
-        <div className="provider-meta">
+        <div className="provider-rating">
           ★ {provider.rating}
-          <span>({provider.reviews})</span>
-          • {provider.distance}
         </div>
 
-        <div className="provider-location">
-          📍 {provider.location}
-        </div>
+        <div className="provider-actions">
+          <Link to={`/provider/${provider.id}`}>
+            View details
+          </Link>
 
-        <Link to={`/provider/${provider.id}`} className="provider-link">
-          View details →
-        </Link>
+          <a
+            className="outline"
+            href={`tel:${provider.phone}`}
+          >
+            Call
+          </a>
+        </div>
       </div>
     </article>
   );
 }
-
-export default ProviderCard;
