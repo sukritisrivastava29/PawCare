@@ -3,9 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Provider from "./pages/Provider";
-import Emergency from "./pages/Emergency";
-import PetProfile from "./pages/PetProfile";
-import HealthRecord from "./pages/HealthRecord";
+import AIHealth from "./pages/AIHealth";
 
 function App() {
   return (
@@ -14,9 +12,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/provider/:id" element={<Provider />} />
-        <Route path="/emergency" element={<Emergency />} />
-        <Route path="/pet" element={<PetProfile />} />
-        <Route path="/health-record" element={<HealthRecord />} />
+        <Route path="/ai-health" element={<AIHealth />} />
       </Routes>
     </BrowserRouter>
   );
