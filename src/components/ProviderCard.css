@@ -1,0 +1,142 @@
+.search-provider-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 390px;
+  padding: 34px 28px 28px;
+  background: #ffffff;
+  border: 1px solid #e1ded5;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(23, 63, 67, 0.05);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.search-provider-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 35px rgba(23, 63, 67, 0.1);
+}
+
+/* PAW */
+
+.search-provider-paw {
+  margin-bottom: 30px;
+  color: #40305f;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* TYPE */
+
+.search-provider-type {
+  margin-bottom: 10px;
+  color: #e76f51;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* NAME */
+
+.search-provider-name {
+  min-height: 58px;
+  margin: 0;
+  color: #173f43;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  line-height: 1.2;
+}
+
+/* LOCATION */
+
+.search-provider-location {
+  margin: 20px 0 0;
+  color: #6b7d7e;
+  font-size: 14px;
+}
+
+/* RATING */
+
+.search-provider-rating {
+  margin-top: 34px;
+  color: #173f43;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* BUTTONS */
+
+.search-provider-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.search-provider-view,
+.search-provider-call {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  box-sizing: border-box;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+/* VIEW */
+
+.search-provider-view {
+  border: 1px solid #173f43;
+  background: #173f43;
+  color: #ffffff;
+}
+
+.search-provider-view:hover {
+  background: #24575b;
+  border-color: #24575b;
+  transform: translateY(-2px);
+}
+
+/* CALL */
+
+.search-provider-call {
+  border: 1px solid #173f43;
+  background: #173f43;
+  color: #ffffff;
+}
+
+.search-provider-call:hover {
+  background: #24575b;
+  border-color: #24575b;
+  transform: translateY(-2px);
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .search-provider-card {
+    min-height: 360px;
+    padding: 28px 22px 22px;
+  }
+
+  .search-provider-actions {
+    flex-direction: column;
+  }
+
+  .search-provider-view,
+  .search-provider-call {
+    width: 100%;
+  }
+}

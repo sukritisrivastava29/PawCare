@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { providers } from "../data/mockData";
+import "./Provider.css";
 
 export default function Provider() {
   const { id } = useParams();
@@ -12,11 +13,11 @@ export default function Provider() {
     return (
       <div className="provider-page">
         <div className="provider-container">
-          <Link to="/search" className="back-link">
+          <Link to="/search" className="provider-back-link">
             ← Back to Find Care
           </Link>
 
-          <div className="not-found">
+          <div className="provider-not-found">
             <h1>Provider not found</h1>
             <Link to="/search">Return to Find Care</Link>
           </div>
@@ -27,20 +28,21 @@ export default function Provider() {
 
   const phone = provider.phone || "+91 98765 43210";
 
-  const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    provider.location
-  )}`;
+  const directionsUrl =
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      provider.location
+    )}`;
 
   return (
     <div className="provider-page">
       <div className="provider-container">
 
-        <Link to="/search" className="back-link">
+        <Link to="/search" className="provider-back-link">
           ← Back to Find Care
         </Link>
 
-        {/* HERO */}
-        <div className="provider-hero">
+        <section className="provider-hero">
+
           <span className="provider-tag">
             {provider.type}
           </span>
@@ -49,29 +51,30 @@ export default function Provider() {
 
           <div className="provider-location">
             <span>⌖</span>
-            {provider.location}
+            <span>{provider.location}</span>
           </div>
 
           <div className="provider-meta">
-            <span className="rating">
+            <span className="provider-rating">
               ★ {provider.rating}
             </span>
 
-            <span className="meta-divider">•</span>
+            <span className="provider-divider">•</span>
 
-            <span className="trusted">
+            <span className="provider-trusted">
               ✓ Trusted provider
             </span>
           </div>
-        </div>
 
-        {/* CONTENT */}
-        <div className="provider-grid">
+        </section>
+
+        <div className="provider-details-grid">
 
           <main className="provider-main">
 
-            <section className="info-section">
-              <p className="section-label">
+            <section className="provider-info-section">
+
+              <p className="provider-section-label">
                 ABOUT
               </p>
 
@@ -81,40 +84,51 @@ export default function Provider() {
                 {provider.description ||
                   "A trusted animal-care provider offering professional support for pets and their owners."}
               </p>
+
             </section>
 
-            <section className="info-section services-section">
-              <p className="section-label">
+            <section className="provider-info-section">
+
+              <p className="provider-section-label">
                 CARE & SERVICES
               </p>
 
               <h2>Services</h2>
 
-              <div className="service-list">
+              <div className="provider-service-list">
                 {(provider.services || [
                   "Veterinary consultation",
                   "Pet health checkup",
                   "Emergency care",
                 ]).map((service, index) => (
-                  <div className="service-item" key={index}>
-                    <span className="service-check">✓</span>
+                  <div
+                    className="provider-service-item"
+                    key={index}
+                  >
+                    <span className="provider-service-check">
+                      ✓
+                    </span>
+
                     <span>{service}</span>
                   </div>
                 ))}
               </div>
+
             </section>
 
           </main>
 
-          {/* SIDE CARD */}
-          <aside className="provider-card">
+          <aside className="provider-details-card">
 
-            <div className="availability">
+            <div className="provider-availability">
+
               <span
-                className={`status-dot ${
-                  provider.available ? "available" : "unavailable"
+                className={`provider-status-dot ${
+                  provider.available
+                    ? "is-available"
+                    : "is-unavailable"
                 }`}
-              ></span>
+              />
 
               <div>
                 <small>Availability</small>
@@ -125,14 +139,17 @@ export default function Provider() {
                     : "Currently unavailable"}
                 </strong>
               </div>
+
             </div>
 
-            <div className="card-divider"></div>
+            <div className="provider-card-divider" />
 
-            <div className="contact-info">
+            <div className="provider-contact-info">
 
-              <div className="contact-item">
-                <span className="contact-icon">⌖</span>
+              <div className="provider-contact-item">
+                <span className="provider-contact-icon">
+                  ⌖
+                </span>
 
                 <div>
                   <small>Location</small>
@@ -140,8 +157,10 @@ export default function Provider() {
                 </div>
               </div>
 
-              <div className="contact-item">
-                <span className="contact-icon">☎</span>
+              <div className="provider-contact-item">
+                <span className="provider-contact-icon">
+                  ☎
+                </span>
 
                 <div>
                   <small>Contact</small>
@@ -151,19 +170,24 @@ export default function Provider() {
 
             </div>
 
-            <div className="provider-actions">
+            <div className="provider-details-actions">
 
               <a
                 href={`tel:${phone}`}
-                className="primary-btn"
+                className="provider-primary-btn"
               >
                 Call provider
               </a>
 
               <button
-                className="secondary-btn"
+                type="button"
+                className="provider-secondary-btn"
                 onClick={() =>
-                  window.open(directionsUrl, "_blank")
+                  window.open(
+                    directionsUrl,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
                 }
               >
                 Get directions
