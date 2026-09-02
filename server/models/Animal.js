@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const animalSchema = new mongoose.Schema(
   {
-    caregiver: {
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -17,53 +17,37 @@ const animalSchema = new mongoose.Schema(
     species: {
       type: String,
       required: true,
-      trim: true,
+      enum: ["dog", "cat", "rabbit", "bird", "other"],
     },
 
     breed: {
       type: String,
-      default: "Unknown",
       trim: true,
     },
 
     gender: {
       type: String,
-      enum: ["Male", "Female", "Unknown"],
-      default: "Unknown",
+      enum: ["male", "female", "unknown"],
     },
 
-    dateOfBirth: {
-      type: Date,
+    age: {
+      type: Number,
+      min: 0,
     },
 
     weight: {
       type: Number,
-    },
-
-    color: {
-      type: String,
-      trim: true,
-    },
-
-    photo: {
-      type: String,
-      default: "",
+      min: 0,
     },
 
     healthStatus: {
       type: String,
-      default: "",
+      default: "healthy",
     },
 
     vaccinationStatus: {
       type: String,
-      enum: [
-        "Vaccinated",
-        "Partially Vaccinated",
-        "Not Vaccinated",
-        "Unknown",
-      ],
-      default: "Unknown",
+      default: "up-to-date",
     },
 
     medicalNotes: {
@@ -71,34 +55,7 @@ const animalSchema = new mongoose.Schema(
       default: "",
     },
 
-    careStatus: {
-      type: String,
-      enum: [
-        "My Animal",
-        "Rescued",
-        "Fostered",
-        "Stray / Community Animal",
-        "Looking for Adoption",
-        "Adopted",
-      ],
-      default: "My Animal",
-    },
-
-    foundLocation: {
-      type: String,
-      default: "",
-    },
-
-    rescueDate: {
-      type: Date,
-    },
-
-    currentLocation: {
-      type: String,
-      default: "",
-    },
-
-    notes: {
+    photo: {
       type: String,
       default: "",
     },
