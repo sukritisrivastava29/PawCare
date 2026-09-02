@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 
 function AIHealth() {
   const [message, setMessage] = useState("");
+
   const [messages, setMessages] = useState([
     {
       role: "ai",
@@ -46,24 +47,28 @@ function AIHealth() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Something went wrong");
+        throw new Error(
+          data.error || "Failed to get response from PawCare AI"
+        );
       }
 
       setMessages((prev) => [
         ...prev,
         {
           role: "ai",
-          text: data.reply,
+          text: data.reply || "I couldn't generate a response. Please try again.",
         },
       ]);
     } catch (error) {
-      console.error(error);
+      console.error("AI ERROR:", error);
 
       setMessages((prev) => [
         ...prev,
         {
           role: "ai",
-          text: "I'm having trouble connecting right now. Please try again in a moment.",
+          text:
+            error.message ||
+            "I'm having trouble connecting right now. Please try again in a moment.",
         },
       ]);
     } finally {
@@ -72,7 +77,8 @@ function AIHealth() {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
       sendMessage();
     }
   };
@@ -152,6 +158,7 @@ function AIHealth() {
                   type="button"
                   onClick={sendMessage}
                   disabled={!message.trim() || loading}
+                  aria-label="Send message"
                 >
                   →
                 </button>

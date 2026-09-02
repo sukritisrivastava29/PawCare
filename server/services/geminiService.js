@@ -1,88 +1,61 @@
 const generatePetCareResponse = async (message) => {
-  const prompt = `
-You are PawCare AI, a helpful pet-care information assistant.
+  console.log("Calling Gemini...");
 
-Help pet owners understand general information about their pet's symptoms.
+  const url =
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent";
 
-Rules:
-- Do not diagnose medical conditions.
-- Do not prescribe medication.
-- Explain possible general causes in simple language.
-- Tell the user what they can observe or monitor.
-- Recommend contacting a veterinarian when appropriate.
-- If symptoms could indicate an emergency, clearly recommend immediate veterinary care.
-- Keep responses concise, practical, reassuring, and easy to understand.
-
-User message:
-${message}
-`;
-
-  const controller = new AbortController();
-
-  const timeout = setTimeout(() => {
-    controller.abort();
-  }, 30000);
-
-  try {
-    console.log("Calling Gemini...");
-
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": process.env.GEMINI_API_KEY,
-        },
-        body: JSON.stringify({
-          contents: [
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": process.env.GEMINI_API_KEY,
+    },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
             {
-              parts: [
-                {
-                  text: prompt,
-                },
-              ],
+              text: `You are PawCare AI, a concise pet-care assistant.
+
+Do not diagnose or prescribe medication.
+Give general information only.
+Recommend a veterinarian when appropriate.
+
+User:
+${message}`,
             },
           ],
-          generationConfig: {
-            maxOutputTokens: 500,
-            thinkingConfig: {
-              thinkingLevel: "low",
-            },
-          },
-        }),
-        signal: controller.signal,
-      }
+        },
+      ],
+    }),
+  });
+
+  console.log("Gemini HTTP status:", response.status);
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("Gemini API error:", data);
+
+    throw new Error(
+      data?.error?.message || "Gemini API request failed"
     );
+  }
 
-    console.log("Gemini HTTP status:", response.status);
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Gemini API error:", data);
-
-      throw new Error(
-        data?.error?.message || "Gemini API request failed"
-      );
-    }
-
-    const reply = data?.candidates?.[0]?.content?.parts
+  const reply =
+    data?.candidates?.[0]?.content?.parts
       ?.map((part) => part.text || "")
       .join("")
       .trim();
 
-    if (!reply) {
-      console.error("Gemini returned no text:", data);
-      throw new Error("Gemini returned an empty response");
-    }
-
-    console.log("Gemini responded!");
-
-    return reply;
-  } finally {
-    clearTimeout(timeout);
+  if (!reply) {
+    console.error("No Gemini response:", data);
+    throw new Error("Gemini returned an empty response");
   }
+
+  console.log("Gemini responded!");
+
+  return reply;
 };
 
 module.exports = {
