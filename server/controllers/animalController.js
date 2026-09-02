@@ -40,8 +40,68 @@ const getMyAnimals = async (req, res) => {
     });
   }
 };
+// Update animal
+const updateAnimal = async (req, res) => {
+  try {
+    const animal = await Animal.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+
+    if (!animal) {
+      return res.status(404).json({
+        message: "Animal not found",
+      });
+    }
+
+    Object.assign(animal, req.body);
+
+    await animal.save();
+
+    res.json({
+      message: "Animal updated successfully",
+      animal,
+    });
+  } catch (error) {
+    console.error("Update Animal Error:", error);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
+
+// Delete animal
+const deleteAnimal = async (req, res) => {
+  try {
+    const animal = await Animal.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+
+    if (!animal) {
+      return res.status(404).json({
+        message: "Animal not found",
+      });
+    }
+
+    await animal.deleteOne();
+
+    res.json({
+      message: "Animal deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete Animal Error:", error);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
 
 module.exports = {
   createAnimal,
   getMyAnimals,
+  updateAnimal,
+  deleteAnimal,
 };
