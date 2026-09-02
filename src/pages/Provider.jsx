@@ -5,74 +5,176 @@ export default function Provider() {
   const { id } = useParams();
 
   const provider = providers.find(
-    (item) => String(item.id) === String(id)
+    (p) => String(p.id) === String(id)
   );
 
   if (!provider) {
     return (
-      <main className="provider-page">
-        <h1>Provider not found</h1>
-        <Link to="/search">← Back to Find Care</Link>
-      </main>
+      <div className="provider-page">
+        <div className="provider-container">
+          <Link to="/search" className="back-link">
+            ← Back to Find Care
+          </Link>
+
+          <div className="not-found">
+            <h1>Provider not found</h1>
+            <Link to="/search">Return to Find Care</Link>
+          </div>
+        </div>
+      </div>
     );
   }
 
+  const phone = provider.phone || "+91 98765 43210";
+
+  const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    provider.location
+  )}`;
+
   return (
-    <main className="provider-page">
-      <Link to="/search" className="back-link">
-        ← Back to Find Care
-      </Link>
+    <div className="provider-page">
+      <div className="provider-container">
 
-      <section className="provider-detail">
-        <div className="provider-detail-icon">🐾</div>
+        <Link to="/search" className="back-link">
+          ← Back to Find Care
+        </Link>
 
-        <div>
-          <p className="eyebrow">{provider.type}</p>
+        {/* HERO */}
+        <div className="provider-hero">
+          <span className="provider-tag">
+            {provider.type}
+          </span>
 
           <h1>{provider.name}</h1>
 
-          <p className="provider-location">
-            📍 {provider.location} · {provider.distance}
-          </p>
+          <div className="provider-location">
+            <span>⌖</span>
+            {provider.location}
+          </div>
 
-          <div className="detail-rating">
-            ★ {provider.rating} · Trusted provider
+          <div className="provider-meta">
+            <span className="rating">
+              ★ {provider.rating}
+            </span>
+
+            <span className="meta-divider">•</span>
+
+            <span className="trusted">
+              ✓ Trusted provider
+            </span>
           </div>
         </div>
-      </section>
 
-      <section className="provider-info-grid">
-        <div className="info-box">
-          <span>Availability</span>
-          <strong>
-            {provider.available ? "Available today" : "Currently unavailable"}
-          </strong>
+        {/* CONTENT */}
+        <div className="provider-grid">
+
+          <main className="provider-main">
+
+            <section className="info-section">
+              <p className="section-label">
+                ABOUT
+              </p>
+
+              <h2>About this provider</h2>
+
+              <p className="provider-description">
+                {provider.description ||
+                  "A trusted animal-care provider offering professional support for pets and their owners."}
+              </p>
+            </section>
+
+            <section className="info-section services-section">
+              <p className="section-label">
+                CARE & SERVICES
+              </p>
+
+              <h2>Services</h2>
+
+              <div className="service-list">
+                {(provider.services || [
+                  "Veterinary consultation",
+                  "Pet health checkup",
+                  "Emergency care",
+                ]).map((service, index) => (
+                  <div className="service-item" key={index}>
+                    <span className="service-check">✓</span>
+                    <span>{service}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+          </main>
+
+          {/* SIDE CARD */}
+          <aside className="provider-card">
+
+            <div className="availability">
+              <span
+                className={`status-dot ${
+                  provider.available ? "available" : "unavailable"
+                }`}
+              ></span>
+
+              <div>
+                <small>Availability</small>
+
+                <strong>
+                  {provider.available
+                    ? "Available now"
+                    : "Currently unavailable"}
+                </strong>
+              </div>
+            </div>
+
+            <div className="card-divider"></div>
+
+            <div className="contact-info">
+
+              <div className="contact-item">
+                <span className="contact-icon">⌖</span>
+
+                <div>
+                  <small>Location</small>
+                  <strong>{provider.location}</strong>
+                </div>
+              </div>
+
+              <div className="contact-item">
+                <span className="contact-icon">☎</span>
+
+                <div>
+                  <small>Contact</small>
+                  <strong>{phone}</strong>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="provider-actions">
+
+              <a
+                href={`tel:${phone}`}
+                className="primary-btn"
+              >
+                Call provider
+              </a>
+
+              <button
+                className="secondary-btn"
+                onClick={() =>
+                  window.open(directionsUrl, "_blank")
+                }
+              >
+                Get directions
+              </button>
+
+            </div>
+
+          </aside>
+
         </div>
-
-        <div className="info-box">
-          <span>Location</span>
-          <strong>{provider.location}</strong>
-        </div>
-
-        <div className="info-box">
-          <span>Contact</span>
-          <strong>{provider.phone}</strong>
-        </div>
-      </section>
-
-      <section className="provider-about">
-        <h2>About this provider</h2>
-
-        <p>
-          A trusted animal-care provider offering professional support
-          for pets and their owners.
-        </p>
-
-        <div className="provider-buttons">
-          <a href={`tel:${provider.phone}`}>Call provider</a>
-          <button>Get directions</button>
-        </div>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
