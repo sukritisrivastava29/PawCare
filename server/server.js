@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 
 const aiRoutes = require("./routes/aiRoutes");
 
@@ -22,12 +23,20 @@ app.get("/", (req, res) => {
   });
 });
 
+
 app.use("/api/ai", aiRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(
-    `PawCare AI server running on http://localhost:${PORT}`
-  );
-});
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected successfully");
+
+    app.listen(PORT, () => {
+      console.log(`PawCare server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection failed:", error.message);
+  });
