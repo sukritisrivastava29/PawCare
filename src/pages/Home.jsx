@@ -1,7 +1,19 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 export default function Home() {
+  const [symptoms, setSymptoms] = useState("");
+  const navigate = useNavigate();
+
+  const handleAI = () => {
+    if (!symptoms.trim()) return;
+
+    navigate("/ai-health", {
+      state: { symptoms },
+    });
+  };
+
   return (
     <div className="pawcare-app">
       <Navbar />
@@ -50,7 +62,9 @@ export default function Home() {
         <section className="quick-section">
           <div className="section-heading">
             <p className="eyebrow">START HERE</p>
+
             <h2>Everything your pet needs.</h2>
+
             <p>
               Find help, manage your pet's information and keep their health
               records in one place.
@@ -60,40 +74,52 @@ export default function Home() {
           <div className="quick-grid">
             <Link to="/search" className="quick-card">
               <div className="card-icon">⌕</div>
+
               <h3>Find Care</h3>
+
               <p>
                 Find vets, rescuers, NGOs and pet-care providers around you.
               </p>
+
               <span>Explore →</span>
             </Link>
 
             <Link to="/pet" className="quick-card">
               <div className="card-icon">🐾</div>
+
               <h3>My Pet</h3>
+
               <p>
                 Keep your pet's profile, important details and care information
                 organized.
               </p>
+
               <span>View profile →</span>
             </Link>
 
             <Link to="/health" className="quick-card">
               <div className="card-icon">♡</div>
+
               <h3>Health Record</h3>
+
               <p>
                 Track vaccinations, medical history, medications and upcoming
                 care.
               </p>
+
               <span>View records →</span>
             </Link>
 
             <Link to="/emergency" className="quick-card emergency-card">
               <div className="card-icon">+</div>
+
               <h3>Emergency</h3>
+
               <p>
                 Quickly access emergency veterinary and animal rescue
                 assistance.
               </p>
+
               <span>Get help →</span>
             </Link>
           </div>
@@ -137,8 +163,25 @@ export default function Home() {
             </div>
 
             <div className="ai-input">
-              <span>Describe your pet's symptoms...</span>
-              <b>→</b>
+              <input
+                type="text"
+                placeholder="Describe your pet's symptoms..."
+                value={symptoms}
+                onChange={(e) => setSymptoms(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleAI();
+                  }
+                }}
+              />
+
+              <button
+                type="button"
+                onClick={handleAI}
+                aria-label="Ask PawCare AI"
+              >
+                →
+              </button>
             </div>
           </div>
         </section>
@@ -147,6 +190,7 @@ export default function Home() {
         <section className="provider-section">
           <div>
             <p className="eyebrow">LOCAL CARE NETWORK</p>
+
             <h2>Good care starts with finding the right people.</h2>
           </div>
 
