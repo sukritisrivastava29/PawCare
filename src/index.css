@@ -1218,3 +1218,127 @@ footer > span {
 .ai-input button:disabled {
   cursor: default;
 }
+/* AI CHAT */
+
+.ai-chat-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 390px;
+  overflow-y: auto;
+  padding: 20px 0;
+}
+
+.chat-message {
+  max-width: 82%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.chat-user {
+  align-self: flex-end;
+  background: #177c78;
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+.chat-ai {
+  align-self: flex-start;
+  background: #edf1ed;
+  color: #173f43;
+  border-bottom-left-radius: 5px;
+}
+
+.ai-chat-input {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  border: 1px solid #dddcd5;
+  border-radius: 12px;
+  padding: 8px 10px 8px 14px;
+  background: white;
+}
+
+.ai-chat-input textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: #173f43;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 6px 0;
+}
+
+.ai-chat-input textarea::placeholder {
+  color: #9a9e9c;
+}
+
+.ai-chat-input button {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 9px;
+  background: #e76f51;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.ai-chat-input button:hover:not(:disabled) {
+  transform: translateX(3px);
+}
+
+.ai-chat-input button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ai-upload-note {
+  margin-top: 18px;
+  color: #899495;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ai-care-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: #173f43;
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+.ai-care-button:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 800px) {
+  .ai-chat-messages {
+    max-height: 350px;
+  }
+
+  .chat-message {
+    max-width: 90%;
+  }
+}

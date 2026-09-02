@@ -3,15 +3,77 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 function AIHealth() {
-  const [uploaded, setUploaded] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      role: "ai",
+      text: "Hi! I'm PawCare AI. Tell me what you're noticing about your pet, and I'll help you understand what information may be useful to discuss with a veterinarian.",
+    },
+  ]);
 
-  const handleUpload = (event) => {
-    const file = event.target.files[0];
+  const [loading, setLoading] = useState(false);
 
-    if (file) {
-      setFileName(file.name);
-      setUploaded(true);
+  const sendMessage = async () => {
+    if (!message.trim() || loading) return;
+
+    const userMessage = message.trim();
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "user",
+        text: userMessage,
+      },
+    ]);
+
+    setMessage("");
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/ai/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: userMessage,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: data.reply,
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: "I'm having trouble connecting right now. Please try again in a moment.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
     }
   };
 
@@ -35,111 +97,84 @@ function AIHealth() {
             </h1>
 
             <p>
-              Upload a veterinary report and get an organised,
-              easy-to-read summary.
+              Describe your pet's symptoms and get general,
+              easy-to-understand guidance to help you decide what
+              to discuss with a veterinarian.
             </p>
           </div>
 
           <div className="ai-grid">
 
-            <div className="upload-card">
+            <div className="ai-chat-card">
 
-              <div className="upload-icon">↑</div>
+              <div className="ai-chat-header">
+                <span>✦ PAWCARE AI</span>
+                <small>Gemini</small>
+              </div>
 
-              <h2>Upload a report</h2>
+              <div className="ai-messages">
 
-              <p>
-                PDF, image or veterinary document
+                {messages.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`chat-bubble ${
+                      item.role === "user"
+                        ? "user-bubble"
+                        : "ai-bubble"
+                    }`}
+                  >
+                    {item.text}
+                  </div>
+                ))}
+
+                {loading && (
+                  <div className="chat-bubble ai-bubble">
+                    Thinking...
+                  </div>
+                )}
+
+              </div>
+
+              <div className="ai-input">
+
+                <input
+                  type="text"
+                  placeholder="Describe your pet's symptoms..."
+                  value={message}
+                  onChange={(event) =>
+                    setMessage(event.target.value)
+                  }
+                  onKeyDown={handleKeyDown}
+                  disabled={loading}
+                />
+
+                <button
+                  type="button"
+                  onClick={sendMessage}
+                  disabled={!message.trim() || loading}
+                >
+                  →
+                </button>
+
+              </div>
+
+              <p className="ai-disclaimer">
+                PawCare AI provides general information and does
+                not diagnose conditions or replace professional
+                veterinary advice. For emergencies, contact a
+                veterinarian immediately.
               </p>
 
-              <input
-                type="file"
-                id="report"
-                accept=".pdf,.jpg,.jpeg,.png"
-                onChange={handleUpload}
-              />
-
-              <label
-                htmlFor="report"
-                className="primary-button"
+              <Link
+                to="/search"
+                className="ai-care-button"
               >
-                {uploaded
-                  ? "Report uploaded ✓"
-                  : "Choose report"}
-              </label>
-
-              {uploaded && fileName && (
-                <p className="uploaded-file">
-                  {fileName}
-                </p>
-              )}
+                Find nearby care
+              </Link>
 
             </div>
 
-            {uploaded ? (
-              <div className="ai-result">
-
-                <div className="ai-result-header">
-                  <span>✦ AI SUMMARY</span>
-                  <small>Generated</small>
-                </div>
-
-                <h2>Milo's health report</h2>
-
-                <div className="summary-item">
-                  <span>Diagnosis</span>
-                  <strong>Routine health check</strong>
-                </div>
-
-                <div className="summary-item">
-                  <span>Vaccination</span>
-                  <strong>Rabies — up to date</strong>
-                </div>
-
-                <div className="summary-item">
-                  <span>Medication</span>
-                  <strong>No medication prescribed</strong>
-                </div>
-
-                <div className="summary-item">
-                  <span>Follow-up</span>
-                  <strong>Annual check-up recommended</strong>
-                </div>
-
-                <Link
-                  to="/search"
-                  className="ai-care-button"
-                >
-                  Find nearby care
-                </Link>
-
-                <p className="ai-disclaimer">
-                  AI-generated summaries are for organisation
-                  and understanding only and should not replace
-                  veterinary advice.
-                </p>
-
-              </div>
-            ) : (
-              <div className="ai-result ai-result-empty">
-
-                <div className="ai-result-header">
-                  <span>✦ AI SUMMARY</span>
-                </div>
-
-                <h2>Your report summary will appear here.</h2>
-
-                <p>
-                  Upload a veterinary document and PawCare AI
-                  will organise the important information into
-                  an easier-to-read format.
-                </p>
-
-              </div>
-            )}
-
           </div>
-
         </div>
       </main>
     </div>
