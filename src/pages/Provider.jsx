@@ -30,7 +30,7 @@ export default function Provider() {
 
   const directionsUrl =
     `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      provider.location
+      provider.address || provider.location
     )}`;
 
   return (
@@ -59,11 +59,15 @@ export default function Provider() {
               ★ {provider.rating}
             </span>
 
-            <span className="provider-divider">•</span>
-
-            <span className="provider-trusted">
-              ✓ Trusted provider
+            <span className="provider-divider">
+              •
             </span>
+
+            {provider.verified && (
+              <span className="provider-trusted">
+                ✓ Verified provider
+              </span>
+            )}
           </div>
 
         </section>
@@ -96,22 +100,20 @@ export default function Provider() {
               <h2>Services</h2>
 
               <div className="provider-service-list">
-                {(provider.services || [
-                  "Veterinary consultation",
-                  "Pet health checkup",
-                  "Emergency care",
-                ]).map((service, index) => (
-                  <div
-                    className="provider-service-item"
-                    key={index}
-                  >
-                    <span className="provider-service-check">
-                      ✓
-                    </span>
+                {(provider.services || []).map(
+                  (service, index) => (
+                    <div
+                      className="provider-service-item"
+                      key={index}
+                    >
+                      <span className="provider-service-check">
+                        ✓
+                      </span>
 
-                    <span>{service}</span>
-                  </div>
-                ))}
+                      <span>{service}</span>
+                    </div>
+                  )
+                )}
               </div>
 
             </section>
@@ -131,12 +133,13 @@ export default function Provider() {
               />
 
               <div>
-                <small>Availability</small>
+                <small>Hours</small>
 
                 <strong>
-                  {provider.available
-                    ? "Available now"
-                    : "Currently unavailable"}
+                  {provider.hours ||
+                    (provider.available
+                      ? "Open now"
+                      : "Currently closed")}
                 </strong>
               </div>
 
@@ -147,25 +150,33 @@ export default function Provider() {
             <div className="provider-contact-info">
 
               <div className="provider-contact-item">
+
                 <span className="provider-contact-icon">
                   ⌖
                 </span>
 
                 <div>
-                  <small>Location</small>
-                  <strong>{provider.location}</strong>
+                  <small>Address</small>
+
+                  <strong>
+                    {provider.address || provider.location}
+                  </strong>
                 </div>
+
               </div>
 
               <div className="provider-contact-item">
+
                 <span className="provider-contact-icon">
                   ☎
                 </span>
 
                 <div>
                   <small>Contact</small>
+
                   <strong>{phone}</strong>
                 </div>
+
               </div>
 
             </div>
@@ -198,6 +209,7 @@ export default function Provider() {
           </aside>
 
         </div>
+
       </div>
     </div>
   );
