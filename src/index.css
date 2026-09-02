@@ -906,3 +906,265 @@ footer > span {
     display: none;
   }
 }
+
+.ai-page {
+  min-height: 100vh;
+  background: #f7f4ed;
+  color: #173f43;
+  padding: 40px 24px 80px;
+}
+
+.ai-page .container {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.ai-page .back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #173f43;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 55px;
+  transition: transform 0.2s ease;
+}
+
+.ai-page .back-link:hover {
+  transform: translateX(-4px);
+}
+
+.ai-page .page-heading {
+  max-width: 720px;
+  margin-bottom: 48px;
+}
+
+.ai-page .page-heading h1 {
+  margin: 0 0 18px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 6vw, 62px);
+  line-height: 1.04;
+  letter-spacing: -2px;
+  color: #173f43;
+}
+
+.ai-page .page-heading h1 span {
+  color: #357066;
+}
+
+.ai-page .page-heading > p:last-child {
+  max-width: 600px;
+  margin: 0;
+  color: #607174;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.ai-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.upload-card,
+.ai-result {
+  background: #fff;
+  border: 1px solid #e1ded5;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 10px 35px rgba(23, 63, 67, 0.05);
+}
+
+.upload-card {
+  text-align: center;
+}
+
+.upload-icon {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e8f1ef;
+  color: #357066;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.upload-card h2,
+.ai-result h2 {
+  margin: 0 0 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 28px;
+  color: #173f43;
+}
+
+.upload-card > p {
+  margin: 0 0 25px;
+  color: #7a8888;
+  font-size: 14px;
+}
+
+.upload-card input {
+  display: none;
+}
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 9px;
+  background: #357066;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primary-button:hover {
+  background: #285d55;
+  transform: translateY(-1px);
+}
+
+.uploaded-file {
+  margin-top: 16px !important;
+  margin-bottom: 0 !important;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f3f6f3;
+  color: #357066 !important;
+  font-size: 12px !important;
+  word-break: break-word;
+}
+
+.ai-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+
+.ai-result-header span {
+  color: #e76f51;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.ai-result-header small {
+  color: #899495;
+  font-size: 11px;
+}
+
+.ai-result h2 {
+  margin-bottom: 24px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 25px;
+  padding: 16px 0;
+  border-top: 1px solid #e7e4dc;
+}
+
+.summary-item span {
+  color: #899495;
+  font-size: 12px;
+}
+
+.summary-item strong {
+  max-width: 60%;
+  color: #29484b;
+  font-size: 13px;
+  text-align: right;
+}
+
+.ai-result-empty {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ai-result-empty h2 {
+  max-width: 430px;
+}
+
+.ai-result-empty > p {
+  max-width: 500px;
+  margin: 0;
+  color: #607174;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.ai-care-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  margin-top: 25px;
+  border-radius: 9px;
+  background: #357066;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.ai-care-button:hover {
+  background: #285d55;
+  transform: translateY(-1px);
+}
+
+.ai-disclaimer {
+  margin: 18px 0 0;
+  color: #899495;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+  .ai-page {
+    padding: 28px 18px 60px;
+  }
+
+  .ai-page .back-link {
+    margin-bottom: 38px;
+  }
+
+  .ai-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-page .page-heading h1 {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 500px) {
+  .upload-card,
+  .ai-result {
+    padding: 24px;
+  }
+
+  .summary-item {
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .summary-item strong {
+    max-width: 100%;
+    text-align: left;
+  }
+}
