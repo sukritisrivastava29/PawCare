@@ -1,20 +1,37 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Animals from "./pages/Animals";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Home from "./pages/Home";
-import Search from "./pages/Search";
-import Provider from "./pages/Provider";
-import AIHealth from "./pages/AIHealth";
+import Animals from "./pages/Animals";
 import Login from "./pages/Login";
+
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+
         <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/provider/:id" element={<Provider />} />
-        <Route path="/ai-health" element={<AIHealth />} />
-        <Route path="/animals" element={<Animals />} />
+
         <Route path="/login" element={<Login />} />
+
+        <Route
+          path="/animals"
+          element={
+            <ProtectedRoute>
+              <Animals />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );
