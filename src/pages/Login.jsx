@@ -21,56 +21,61 @@ function Login() {
       [e.target.name]: e.target.value,
     }));
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Password validation
+  if (form.password.length < 8) {
+    setError("Password must be at least 8 characters long.");
+    return;
+  }
 
-    setError("");
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: form.email.trim(),
-          password: form.password,
-        }),
-      });
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: form.email.trim(),
+        password: form.password,
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        setError(data.message || "Invalid email or password.");
-        return;
-      }
-
-      // Make sure the backend actually returned a token
-      if (!data.token) {
-        setError("Login succeeded, but no authentication token was received.");
-        return;
-      }
-
-      // Save authentication
-      localStorage.setItem("token", data.token);
-
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      }
-
-      // Go to protected Animals page
-      navigate("/animals", { replace: true });
-    } catch (error) {
-      console.error("Login error:", error);
-      setError(
-        "Unable to connect to PawCare. Make sure the backend is running."
-      );
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      setError(data.message || "Invalid email or password.");
+      return;
     }
-  };
+
+    if (!data.token) {
+      setError(
+        "Login succeeded, but no authentication token was received."
+      );
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+
+    if (data.user) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+    }
+
+    navigate("/animals", { replace: true });
+  } catch (error) {
+    console.error("Login error:", error);
+
+    setError(
+      "Unable to connect to PawCare. Make sure the backend is running."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-page">
@@ -190,16 +195,14 @@ function Login() {
               </div>
 
               <input
-                id="password"
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                autoComplete="current-password"
-                required
-              />
-
+  type="password"
+  name="password"
+  value={form.password}
+  onChange={handleChange}
+  placeholder="Enter your password"
+  minLength={8}
+  required
+/>
             </div>
 
             {/* LOGIN BUTTON */}

@@ -11,6 +11,11 @@ const generateToken = (userId) => {
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+    if (!password || password.length < 8) {
+  return res.status(400).json({
+    message: "Password must be at least 8 characters long",
+  });
+}
     if (!name || !email || !password) {
       return res.status(400).json({
         message: "Name, email and password are required",

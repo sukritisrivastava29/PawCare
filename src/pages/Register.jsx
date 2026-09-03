@@ -187,8 +187,8 @@ function Register() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                placeholder="At least 6 characters"
-                minLength="6"
+                placeholder="At least 8 characters"
+                minLength="8"
                 required
               />
             </div>
