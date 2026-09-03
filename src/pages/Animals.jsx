@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Animals.css";
-
+import Navbar from "../components/Navbar";
 const API_URL = "http://localhost:5000/api";
 
 const initialForm = {
@@ -30,9 +30,6 @@ function Animals() {
     Authorization: `Bearer ${token}`,
   };
 
-  // -----------------------------
-  // GET ANIMALS
-  // -----------------------------
   const fetchAnimals = async () => {
     try {
       setError("");
@@ -68,9 +65,6 @@ function Animals() {
     fetchAnimals();
   }, []);
 
-  // -----------------------------
-  // FORM CHANGE
-  // -----------------------------
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -78,9 +72,6 @@ function Animals() {
     });
   };
 
-  // -----------------------------
-  // ADD / UPDATE
-  // -----------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -139,9 +130,6 @@ function Animals() {
     }
   };
 
-  // -----------------------------
-  // EDIT
-  // -----------------------------
   const handleEdit = (animal) => {
     setEditingId(animal._id);
 
@@ -164,9 +152,6 @@ function Animals() {
     });
   };
 
-  // -----------------------------
-  // DELETE
-  // -----------------------------
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this animal profile?"
@@ -202,17 +187,10 @@ function Animals() {
     }
   };
 
-  // -----------------------------
-  // CANCEL EDIT
-  // -----------------------------
   const cancelEdit = () => {
     setEditingId(null);
     setForm(initialForm);
   };
-
-  // -----------------------------
-  // HELPERS
-  // -----------------------------
   const getAnimalIcon = (species) => {
     const icons = {
       dog: "🐶",
@@ -247,10 +225,12 @@ function Animals() {
     );
   }
 
-  return (
-    <div className="animals-page">
+ return (
+  <div className="pawcare-app">
+    <Navbar />
 
-      {/* HERO */}
+    <main className="animals-page">
+
       <section className="animals-header">
         <div>
           <span className="section-label">PET CARE · PROFILES</span>
@@ -276,7 +256,6 @@ function Animals() {
         </div>
       </section>
 
-      {/* ERROR */}
       {error && (
         <div className="animals-error">
           <span>!</span>
@@ -284,7 +263,6 @@ function Animals() {
         </div>
       )}
 
-      {/* FORM */}
       <section className="animal-form-card">
 
         <div className="form-heading">
@@ -623,7 +601,7 @@ function Animals() {
         )}
 
       </section>
-
+</main>
     </div>
   );
 }

@@ -1,6 +1,13 @@
+/* =========================================
+   PAWCARE HEADER NAVBAR
+========================================= */
+
 .navbar {
+  width: 100%;
   height: 88px;
   padding: 0 7%;
+  box-sizing: border-box;
+
   background: #f8f5ed;
 
   display: flex;
@@ -8,15 +15,22 @@
   justify-content: space-between;
 
   border-bottom: 1px solid rgba(15, 87, 83, 0.08);
+
+  position: relative;
+  z-index: 1000;
 }
 
-/* LOGO */
+/* =========================================
+   LOGO
+========================================= */
 
 .logo {
   text-decoration: none;
+
   font-family: Georgia, serif;
   font-size: 30px;
   font-weight: 700;
+
   color: #176f6b;
 
   display: flex;
@@ -34,7 +48,9 @@
   font-size: 25px;
 }
 
-/* NAVIGATION */
+/* =========================================
+   NAVIGATION
+========================================= */
 
 .nav-links {
   display: flex;
@@ -44,6 +60,7 @@
 
 .nav-links a {
   text-decoration: none;
+
   color: #073f3d;
 
   font-size: 15px;
@@ -60,7 +77,9 @@
   color: #f47f68;
 }
 
-/* RIGHT SIDE */
+/* =========================================
+   RIGHT SIDE
+========================================= */
 
 .nav-actions {
   display: flex;
@@ -68,7 +87,9 @@
   gap: 14px;
 }
 
-/* LOGOUT */
+/* =========================================
+   LOGOUT
+========================================= */
 
 .logout-btn {
   border: 1px solid #176f6b;
@@ -92,12 +113,15 @@
   color: white;
 }
 
-/* LOGIN */
+/* =========================================
+   LOGIN
+========================================= */
 
 .login-nav-btn {
   text-decoration: none;
 
   border: 1px solid #176f6b;
+
   color: #176f6b;
 
   padding: 11px 19px;
@@ -114,7 +138,9 @@
   color: white;
 }
 
-/* EMERGENCY */
+/* =========================================
+   EMERGENCY
+========================================= */
 
 .emergency-nav {
   text-decoration: none;
@@ -134,4 +160,58 @@
 .emergency-nav:hover {
   background: #e96f55;
   transform: translateY(-1px);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 4%;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+  }
+
+  .logo {
+    font-size: 25px;
+  }
+
+  .emergency-nav {
+    padding: 11px 15px;
+  }
+}
+
+@media (max-width: 700px) {
+  .nav-links {
+    display: none;
+  }
+
+  .navbar {
+    height: 76px;
+  }
+
+  .logo {
+    font-size: 25px;
+  }
+
+  .nav-actions {
+    gap: 8px;
+  }
+
+  .logout-btn,
+  .login-nav-btn {
+    padding: 9px 13px;
+  }
+
+  .emergency-nav {
+    padding: 10px 13px;
+    font-size: 13px;
+  }
 }

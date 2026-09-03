@@ -1342,3 +1342,8 @@ footer > span {
     max-width: 90%;
   }
 }
+@media (min-width: 801px) {
+  .pawcare-app:has(.sidebar-navbar) main {
+    margin-left: 250px;
+  }
+}

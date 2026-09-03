@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import HealthRecord from "./pages/HealthRecord";
 import Emergency from "./pages/Emergency";
 import AIHealth from "./pages/AIHealth";
+import Profile from "./pages/Profile";
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
 
@@ -42,6 +43,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
           {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
  <Route

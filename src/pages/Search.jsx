@@ -1,15 +1,49 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import Navbar from "../components/Navbar";
 import ProviderCard from "../components/ProviderCard";
 import ServiceCard from "../components/ServiceCard";
+
 import { providers, services } from "../data/mockData";
 
 export default function Search() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [location, setLocation] = useState("All");
-  const categories = ["All", "Veterinarian", "Emergency", "Rescue", "NGO"];
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const serviceId = searchParams.get("service");
+
+  const categories = [
+    "All",
+    "Veterinarian",
+    "Emergency",
+    "Rescue",
+    "NGO",
+  ];
+
   const locations = ["All", "Gurgaon", "Delhi", "Noida"];
+
+  // Handle service card clicks
+  useEffect(() => {
+    if (!serviceId) return;
+
+    const serviceCategoryMap = {
+      "1": "Veterinarian",
+      "2": "Emergency",
+      "3": "Rescue",
+      "4": "NGO",
+    };
+
+    const selectedCategory = serviceCategoryMap[serviceId];
+
+    if (selectedCategory) {
+      setCategory(selectedCategory);
+    }
+  }, [serviceId]);
+
   const filteredProviders = useMemo(() => {
     return providers.filter((provider) => {
       const matchesQuery =
@@ -23,15 +57,28 @@ export default function Search() {
       const matchesLocation =
         location === "All" || provider.location === location;
 
-      return matchesQuery && matchesCategory && matchesLocation;
+      return (
+        matchesQuery &&
+        matchesCategory &&
+        matchesLocation
+      );
     });
   }, [query, category, location]);
+
+  const clearFilters = () => {
+    setQuery("");
+    setCategory("All");
+    setLocation("All");
+    setSearchParams({});
+  };
 
   return (
     <div className="pawcare-app">
       <Navbar />
 
       <main className="search-page">
+
+        {/* HERO */}
         <section className="search-hero">
           <div>
             <p className="eyebrow">FIND ANIMAL CARE</p>
@@ -49,7 +96,9 @@ export default function Search() {
           </div>
         </section>
 
+        {/* SEARCH */}
         <section className="search-container">
+
           <div className="search-box">
             <span>⌕</span>
 
@@ -67,7 +116,9 @@ export default function Search() {
             )}
           </div>
 
+          {/* FILTERS */}
           <div className="filter-row">
+
             <div className="filter-group">
               <span>Type</span>
 
@@ -75,8 +126,13 @@ export default function Search() {
                 {categories.map((item) => (
                   <button
                     key={item}
-                    className={category === item ? "selected" : ""}
-                    onClick={() => setCategory(item)}
+                    className={
+                      category === item ? "selected" : ""
+                    }
+                    onClick={() => {
+                      setCategory(item);
+                      setSearchParams({});
+                    }}
                   >
                     {item}
                   </button>
@@ -89,18 +145,23 @@ export default function Search() {
 
               <select
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={(e) =>
+                  setLocation(e.target.value)
+                }
               >
                 {locations.map((item) => (
                   <option key={item}>{item}</option>
                 ))}
               </select>
             </div>
+
           </div>
 
+          {/* RESULTS HEADER */}
           <div className="results-header">
             <div>
               <p className="eyebrow">CARE PROVIDERS</p>
+
               <h2>
                 {filteredProviders.length} places to get help
               </h2>
@@ -111,6 +172,7 @@ export default function Search() {
             </span>
           </div>
 
+          {/* PROVIDERS */}
           {filteredProviders.length > 0 ? (
             <div className="provider-grid">
               {filteredProviders.map((provider) => (
@@ -123,27 +185,29 @@ export default function Search() {
           ) : (
             <div className="empty-results">
               <div>🐾</div>
+
               <h3>No care providers found</h3>
+
               <p>
                 Try another search term or change your filters.
               </p>
 
-              <button
-                onClick={() => {
-                  setQuery("");
-                  setCategory("All");
-                  setLocation("All");
-                }}
-              >
+              <button onClick={clearFilters}>
                 Clear filters
               </button>
             </div>
           )}
+
         </section>
 
+        {/* SERVICES */}
         <section className="services-section">
+
           <div>
-            <p className="eyebrow">WHAT DO YOU NEED?</p>
+            <p className="eyebrow">
+              WHAT DO YOU NEED?
+            </p>
+
             <h2>Explore care services</h2>
           </div>
 
@@ -155,7 +219,9 @@ export default function Search() {
               />
             ))}
           </div>
+
         </section>
+
       </main>
     </div>
   );

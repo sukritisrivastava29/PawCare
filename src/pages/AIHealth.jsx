@@ -16,7 +16,6 @@ function formatAIText(text) {
       return <div key={index} className="ai-space" />;
     }
 
-    // Markdown headings: ### Heading / ## Heading / # Heading
     if (/^#{1,3}\s+/.test(trimmed)) {
       return (
         <div key={index} className="ai-section-title">
@@ -25,7 +24,6 @@ function formatAIText(text) {
       );
     }
 
-    // Bold heading: **Possible reasons**
     if (
       trimmed.startsWith("**") &&
       trimmed.endsWith("**") &&
@@ -38,7 +36,6 @@ function formatAIText(text) {
       );
     }
 
-    // Bullet points
     if (
       trimmed.startsWith("- ") ||
       trimmed.startsWith("* ") ||

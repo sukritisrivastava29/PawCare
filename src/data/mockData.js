@@ -134,6 +134,26 @@ export const providers = [
       "Rescue assistance",
     ],
   },
+  {
+  id: 7,
+  name: "Friendicoes SECA",
+  type: "NGO",
+  location: "Delhi",
+  address: "Delhi, India",
+  phone: "+911123364642",
+  rating: 4.1,
+  verified: true,
+  available: true,
+  hours: "Open during listed hours",
+  description:
+    "An animal welfare organization supporting rescue, rehabilitation and care for animals in need.",
+  services: [
+    "Animal rescue",
+    "Animal welfare",
+    "Shelter support",
+    "Rescue assistance",
+  ],
+},
 ];
 
 export const services = [
