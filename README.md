@@ -1,17 +1,97 @@
-# React + Vite
+# 🐾 PawCare
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PawCare is a full-stack pet care platform designed to help pet owners manage their pets' health information, discover care providers, and access helpful pet-care resources from one place.
 
-Currently, two official plugins are available:
+The project was built to explore full-stack development with authentication, pet health records, provider discovery, REST APIs, deployment, and AI integration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Features
 
-## React Compiler
+- 🔐 User Authentication
+  - User registration and login
+  - JWT-based authentication
+  - Protected routes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🐶 Pet Management
+  - Add and manage pet information
+  - View individual pet profiles
 
-## Expanding the ESLint configuration
+- 🩺 Health Records
+  - Store important health information
+  - Track vaccinations and medical details
+  - Organize pet health records
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-"# PawCare" 
+- 🏥 Care Providers
+  - Browse pet-care providers
+  - View provider information
+  - Find suitable services for pets
+
+- 🤖 AI Pet-Care Assistant
+  - Ask pet-care related questions
+  - AI-generated responses using Gemini
+  - Designed to provide general informational guidance
+
+- 📱 Responsive Interface
+  - Responsive design for desktop and mobile
+  - Simple and user-friendly navigation
+
+- 🌐 Deployment
+  - Frontend deployed on Vercel
+  - Backend deployed on Render
+  - MongoDB Atlas used for database hosting
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- React.js
+- JavaScript
+- Vite
+- CSS
+- React Router
+
+### Backend
+
+- Node.js
+- Express.js
+- REST APIs
+- JWT Authentication
+- bcryptjs
+
+### Database
+
+- MongoDB
+- Mongoose
+
+### AI
+
+- Google Gemini API
+
+### Deployment
+
+- Vercel
+- Render
+- MongoDB Atlas
+
+## 📁 Project Structure
+
+```text
+PawCare/
+│
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   └── ...
+│
+├── server/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   └── server.js
+│
+├── public/
+├── package.json
+├── vite.config.js
+└── README.md
