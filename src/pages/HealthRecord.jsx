@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./HealthRecord.css";
+import { createWorker } from "tesseract.js";
 
 const API_URL = "http://localhost:5000/api";
 const emptyForm = {
@@ -13,7 +14,6 @@ const emptyForm = {
 };
 function HealthRecord() {
   const token = localStorage.getItem("token");
-
   const [animals, setAnimals] = useState([]);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
 
@@ -26,8 +26,9 @@ function HealthRecord() {
 
   const [form, setForm] = useState(emptyForm);
 
-  const [error, setError] = useState("");
-
+const [error, setError] = useState("");
+const [ocrLoading, setOcrLoading] = useState(false);
+const [ocrText, setOcrText] = useState("");
   // --------------------------------
   // GET USER'S ANIMALS
   // --------------------------------
@@ -64,10 +65,6 @@ function HealthRecord() {
     }
   };
 
-  // --------------------------------
-  // GET HEALTH RECORDS
-  // --------------------------------
-
   const fetchRecords = async (animalId) => {
     try {
       setLoadingRecords(true);
@@ -97,18 +94,12 @@ function HealthRecord() {
     }
   };
 
-  // --------------------------------
-  // INITIAL LOAD
-  // --------------------------------
 
   useEffect(() => {
     fetchAnimals();
   }, []);
 
-  // --------------------------------
-  // LOAD RECORDS WHEN ANIMAL CHANGES
-  // --------------------------------
-
+ 
   useEffect(() => {
     if (selectedAnimal?._id) {
       fetchRecords(selectedAnimal._id);
@@ -127,7 +118,58 @@ function HealthRecord() {
       [e.target.name]: e.target.value,
     });
   };
+const handleOCR = async (e) => {
+  const file = e.target.files?.[0];
 
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    setError("Please upload a JPG or PNG image.");
+    e.target.value = "";
+    return;
+  }
+
+  try {
+    setOcrLoading(true);
+    setOcrText("");
+    setError("");
+
+    const worker = await createWorker("eng");
+
+    const {
+      data: { text },
+    } = await worker.recognize(file);
+
+    await worker.terminate();
+
+    const extractedText = text.trim();
+
+    if (!extractedText) {
+      setError(
+        "I couldn't read any text from this image. Try a clearer photo."
+      );
+      return;
+    }
+
+    setOcrText(extractedText);
+
+    setForm((prev) => ({
+      ...prev,
+      type: "Other",
+      title: "Veterinary report",
+      notes: extractedText,
+    }));
+  } catch (error) {
+    console.error("OCR error:", error);
+
+    setError(
+      "Unable to read this report. Please try a clearer image."
+    );
+  } finally {
+    setOcrLoading(false);
+    e.target.value = "";
+  }
+};
   // --------------------------------
   // CREATE RECORD
   // --------------------------------
@@ -296,14 +338,17 @@ function HealthRecord() {
             </p>
           </div>
 
-          <button
-            className="add-record-button"
-            onClick={() => setShowForm(!showForm)}
-          >
-            <span>+</span>
-            Add health record
-          </button>
-
+        <button 
+  type="button"
+  className="add-record-button"
+  onClick={() => {
+    console.log("ADD RECORD CLICKED");
+    setShowForm(true);
+  }}
+>
+  <span>+</span>
+  Add health record
+</button>
         </section>
 
         {/* ANIMAL SELECTOR */}
@@ -479,7 +524,51 @@ function HealthRecord() {
               className="record-form"
               onSubmit={handleSubmit}
             >
+<div className="ocr-upload">
+  <div className="ocr-upload-header">
+    <div>
+      <p className="ocr-label">QUICK ADD</p>
+      <h3>Upload veterinary report</h3>
+      <p>
+        Upload a clear JPG or PNG photo and PawCare will
+        extract the text for your health record.
+      </p>
+    </div>
+  </div>
 
+  <label
+    htmlFor="health-report"
+    className="ocr-upload-button"
+  >
+    {ocrLoading ? "Reading report..." : "Choose report image"}
+  </label>
+
+  <input
+    id="health-report"
+    type="file"
+    accept="image/png,image/jpeg,image/jpg"
+    onChange={handleOCR}
+    disabled={ocrLoading}
+    hidden
+  />
+
+  {ocrLoading && (
+    <div className="ocr-status">
+      <span className="ocr-spinner"></span>
+      Reading your veterinary report...
+    </div>
+  )}
+
+  {ocrText && !ocrLoading && (
+    <div className="ocr-result">
+      <strong>Text extracted successfully</strong>
+      <p>
+        The extracted information has been added to the
+        notes field below. Review it before saving.
+      </p>
+    </div>
+  )}
+</div>
               <div className="form-field">
                 <label>
                   Record type

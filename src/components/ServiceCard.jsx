@@ -11,7 +11,7 @@ export default function ServiceCard({ service }) {
       </div>
 
       <div>
-        <h3>{service.title}</h3>
+        <h3>{service.name}</h3>
         <p>{service.description}</p>
       </div>
 

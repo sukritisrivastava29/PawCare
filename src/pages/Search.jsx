@@ -44,26 +44,41 @@ export default function Search() {
     }
   }, [serviceId]);
 
-  const filteredProviders = useMemo(() => {
-    return providers.filter((provider) => {
-      const matchesQuery =
-        provider.name.toLowerCase().includes(query.toLowerCase()) ||
-        provider.type.toLowerCase().includes(query.toLowerCase()) ||
-        provider.location.toLowerCase().includes(query.toLowerCase());
+ const filteredProviders = useMemo(() => {
+  return providers.filter((provider) => {
+    const matchesQuery =
+      provider.name.toLowerCase().includes(query.toLowerCase()) ||
+      provider.type.toLowerCase().includes(query.toLowerCase()) ||
+      provider.location.toLowerCase().includes(query.toLowerCase());
 
-      const matchesCategory =
-        category === "All" || provider.type === category;
+    const matchesCategory =
+      category === "All" || provider.type === category;
 
-      const matchesLocation =
-        location === "All" || provider.location === location;
+    const matchesLocation =
+      location === "All" || provider.location === location;
 
-      return (
-        matchesQuery &&
-        matchesCategory &&
-        matchesLocation
-      );
-    });
-  }, [query, category, location]);
+    let matchesService = true;
+
+    if (serviceId) {
+      const serviceMap = {
+        "1": ["Veterinarian"],
+        "2": ["Veterinarian", "Emergency"],
+        "3": ["Rescue"],
+        "4": ["NGO"],
+      };
+
+      matchesService =
+        serviceMap[serviceId]?.includes(provider.type) ?? true;
+    }
+
+    return (
+      matchesQuery &&
+      matchesCategory &&
+      matchesLocation &&
+      matchesService
+    );
+  });
+}, [query, category, location, serviceId]);
 
   const clearFilters = () => {
     setQuery("");
