@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "./Login.css";
 
 const API_URL = "http://localhost:5000/api";
 
@@ -15,14 +16,15 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
+    setForm((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setLoading(true);
 
@@ -32,143 +34,211 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          email: form.email.trim(),
+          password: form.password,
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Invalid email or password");
+        setError(data.message || "Invalid email or password.");
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // Make sure the backend actually returned a token
+      if (!data.token) {
+        setError("Login succeeded, but no authentication token was received.");
+        return;
+      }
 
-      navigate("/animals");
+      // Save authentication
+      localStorage.setItem("token", data.token);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      // Go to protected Animals page
+      navigate("/animals", { replace: true });
     } catch (error) {
       console.error("Login error:", error);
-      setError("Unable to connect to PawCare");
+      setError(
+        "Unable to connect to PawCare. Make sure the backend is running."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center px-6">
+    <div className="login-page">
 
-      <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-[32px] overflow-hidden shadow-xl">
+      {/* LEFT VISUAL */}
+      <section className="login-visual">
 
-        {/* LEFT */}
-        <div className="hidden md:flex bg-[#f2eee7] p-12 flex-col justify-between">
+        <Link to="/" className="login-brand">
+          <span className="brand-star">✦</span>
+          <span>
+            Paw<span>Care</span>
+          </span>
+        </Link>
 
-          <div>
-            <div className="flex items-center gap-3 mb-12">
-              <div className="w-11 h-11 rounded-2xl bg-[#d97745] flex items-center justify-center text-white text-xl">
-                🐾
-              </div>
+        <div className="visual-content">
+          <p className="visual-eyebrow">
+            ANIMAL CARE, CONNECTED
+          </p>
 
-              <span className="text-2xl font-bold text-[#292722]">
-                PawCare
-              </span>
-            </div>
+          <h1>
+            Better care
+            <br />
+            for every
+            <br />
+            <span>animal.</span>
+          </h1>
 
-            <h1 className="text-5xl font-bold leading-tight text-[#292722]">
-              Better care
-              <br />
-              for every
-              <br />
-              <span className="text-[#d97745]">animal.</span>
-            </h1>
-
-            <p className="mt-6 text-[#706b63] text-lg leading-relaxed max-w-sm">
-              Keep animal profiles, health information and care
-              details organised in one place.
-            </p>
-          </div>
-
-          <p className="text-sm text-[#8c867c]">
-            For pet parents & rescuers
+          <p className="visual-description">
+            Keep your animals, health records and care information
+            organised in one simple place.
           </p>
         </div>
 
-        {/* RIGHT */}
-        <div className="p-8 md:p-12">
+        <div className="pet-decoration">
+          <div className="pet-circle">
+            🐶
+          </div>
 
-          <div className="max-w-md mx-auto">
-
-            <div className="mb-10">
-              <p className="text-sm font-semibold text-[#d97745] mb-2">
-                WELCOME BACK
-              </p>
-
-              <h2 className="text-3xl font-bold text-[#292722]">
-                Sign in to PawCare
-              </h2>
-
-              <p className="text-[#817b72] mt-2">
-                Continue caring for the animals you love.
-              </p>
-            </div>
-
-            {error && (
-              <div className="mb-5 rounded-xl bg-red-50 border border-red-100 text-red-600 px-4 py-3 text-sm">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-
-              <div>
-                <label className="block text-sm font-semibold text-[#403d38] mb-2">
-                  Email address
-                </label>
-
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  required
-                  className="w-full px-4 py-3.5 rounded-xl border border-[#ded9d0] bg-[#fcfbf9] outline-none focus:border-[#d97745] focus:ring-2 focus:ring-[#d97745]/10 transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#403d38] mb-2">
-                  Password
-                </label>
-
-                <input
-                  type="password"
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  required
-                  className="w-full px-4 py-3.5 rounded-xl border border-[#ded9d0] bg-[#fcfbf9] outline-none focus:border-[#d97745] focus:ring-2 focus:ring-[#d97745]/10 transition"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3.5 rounded-xl bg-[#292722] text-white font-semibold hover:bg-[#3b3934] transition disabled:opacity-50"
-              >
-                {loading ? "Signing in..." : "Sign in"}
-              </button>
-
-            </form>
-
-            <p className="text-center text-sm text-[#8b857b] mt-8">
-              PawCare · Animal care made simpler
-            </p>
-
+          <div className="floating-card">
+            <strong>♥ 4.8</strong>
+            <span>Trusted local care</span>
           </div>
         </div>
 
-      </div>
+        <p className="visual-footer">
+          For pet parents & rescuers
+        </p>
+
+      </section>
+
+      {/* RIGHT FORM */}
+      <section className="login-form-section">
+
+        <div className="login-form-wrapper">
+
+          {/* Mobile logo */}
+          <Link to="/" className="mobile-brand">
+            <span>✦</span> Paw<span>Care</span>
+          </Link>
+
+          <div className="form-heading">
+            <p>WELCOME BACK</p>
+
+            <h2>
+              Sign in to PawCare
+            </h2>
+
+            <span>
+              Continue caring for the animals you love.
+            </span>
+          </div>
+
+          {/* ERROR */}
+          {error && (
+            <div className="login-error">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+
+            {/* EMAIL */}
+            <div className="input-group">
+              <label htmlFor="email">
+                Email address
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            {/* PASSWORD */}
+            <div className="input-group">
+
+              <div className="password-label">
+                <label htmlFor="password">
+                  Password
+                </label>
+
+                <button
+                  type="button"
+                  className="forgot-password"
+                  onClick={() =>
+                    alert("Password reset coming soon.")
+                  }
+                >
+                  Forgot password?
+                </button>
+              </div>
+
+              <input
+                id="password"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                required
+              />
+
+            </div>
+
+            {/* LOGIN BUTTON */}
+            <button
+              type="submit"
+              className="login-button"
+              disabled={loading}
+            >
+              <span>
+                {loading ? "Signing in..." : "Sign in"}
+              </span>
+
+              {!loading && <span>→</span>}
+            </button>
+
+          </form>
+
+          {/* REGISTER FLOW */}
+          <div className="login-divider">
+            <span>New to PawCare?</span>
+          </div>
+
+          <Link
+            to="/register"
+            className="create-account"
+          >
+            Create an account
+            <span>→</span>
+          </Link>
+
+          {/* FOOTER */}
+          <p className="login-footer">
+            PawCare · Animal care made simpler
+          </p>
+
+        </div>
+
+      </section>
+
     </div>
   );
 }

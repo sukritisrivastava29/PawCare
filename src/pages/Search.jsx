@@ -8,10 +8,8 @@ export default function Search() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [location, setLocation] = useState("All");
-
   const categories = ["All", "Veterinarian", "Emergency", "Rescue", "NGO"];
   const locations = ["All", "Gurgaon", "Delhi", "Noida"];
-
   const filteredProviders = useMemo(() => {
     return providers.filter((provider) => {
       const matchesQuery =

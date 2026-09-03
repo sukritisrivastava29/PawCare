@@ -30,7 +30,7 @@ const protect = async (req, res, next) => {
     console.error("Auth Middleware Error:", error);
 
     return res.status(401).json({
-      message: "Not authorized, invalid token",
+      message: "Please Create an account first!",
     });
   }
 };

@@ -1,10 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import "./Navbar.css";
 
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("token");
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -13,10 +12,10 @@ export default function Navbar() {
     { name: "Health Record", path: "/health" },
   ];
 
+  const isLoggedIn = !!localStorage.getItem("token");
+
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
     navigate("/login");
   };
 
@@ -32,29 +31,21 @@ export default function Navbar() {
           <Link
             key={item.path}
             to={item.path}
-            className={
-              location.pathname === item.path ? "active" : ""
-            }
+            className={location.pathname === item.path ? "active" : ""}
           >
             {item.name}
           </Link>
         ))}
       </nav>
 
-      <div className="flex items-center gap-3">
-        {token ? (
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-100 transition"
-          >
-            Logout
+      <div className="nav-actions">
+        {isLoggedIn ? (
+          <button className="logout-btn" onClick={handleLogout}>
+            Log out
           </button>
         ) : (
-          <Link
-            to="/login"
-            className="px-4 py-2 rounded-lg bg-[#176f6a] text-white"
-          >
-            Login
+          <Link to="/login" className="login-nav-btn">
+            Log in
           </Link>
         )}
 
