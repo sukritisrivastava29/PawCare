@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Animals from "./pages/Animals";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import HealthRecord from "./pages/HealthRecord";
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
 
@@ -30,6 +31,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+          <Route
+          path="/health"
+          element={
+            <ProtectedRoute>
+              <HealthRecord />
+            </ProtectedRoute>
+          }
+        />
+          {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+
 
       </Routes>
     </BrowserRouter>
