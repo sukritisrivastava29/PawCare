@@ -4,13 +4,13 @@ import "./Navbar.css";
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Find Care", path: "/search" },
-    { name: "My Animal", path: "/animals" },
-    { name: "Health Record", path: "/health" },
-  ];
+const navItems = [
+  { name: "Home", path: "/" },
+  { name: "Find Care", path: "/search" },
+  { name: "My Animal", path: "/animals" },
+  { name: "Health Record", path: "/health" },
+  { name: "AI Health", path: "/ai-health" },
+];
 
   const isLoggedIn = !!localStorage.getItem("token");
 

@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HealthRecord from "./pages/HealthRecord";
 import Emergency from "./pages/Emergency";
+import AIHealth from "./pages/AIHealth";
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
 
@@ -43,7 +44,14 @@ function App() {
         />
           {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
-
+ <Route
+          path="/ai-health"
+          element={
+            <ProtectedRoute>
+              <AIHealth />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     </BrowserRouter>
