@@ -5,6 +5,7 @@ import Animals from "./pages/Animals";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HealthRecord from "./pages/HealthRecord";
+import Emergency from "./pages/Emergency";
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/emergency" element={<Emergency />} />
         <Route
           path="/animals"
           element={
