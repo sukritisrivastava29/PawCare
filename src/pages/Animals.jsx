@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Animals.css";
 import Navbar from "../components/Navbar";
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://pawcare-backend-vswt.onrender.com/api";
 
 const initialForm = {
   name: "",

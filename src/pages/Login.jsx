@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://pawcare-backend-vswt.onrender.com/api";
 
 function Login() {
   const navigate = useNavigate();

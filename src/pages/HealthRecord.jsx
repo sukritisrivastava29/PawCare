@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import "./HealthRecord.css";
 import { createWorker } from "tesseract.js";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://pawcare-backend-vswt.onrender.com/api";
 const emptyForm = {
   type: "Check-up",
   title: "",

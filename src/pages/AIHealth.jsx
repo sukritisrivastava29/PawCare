@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./AIHealth.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://pawcare-backend-vswt.onrender.com/api";
 function formatAIText(text) {
   if (!text) return null;
 
