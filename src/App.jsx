@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import HealthRecord from "./pages/HealthRecord";
 import Emergency from "./pages/Emergency";
 import AIHealth from "./pages/AIHealth";
+import ProviderDetails from "./pages/ProviderDetails";
 import Profile from "./pages/Profile";
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -35,6 +36,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/provider/:id"
+  element={
+    <ProtectedRoute>
+      <ProviderDetails />
+    </ProtectedRoute>
+  }
+/>
           <Route
           path="/health"
           element={
