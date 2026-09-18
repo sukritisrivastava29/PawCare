@@ -1,6 +1,6 @@
 # 🐾 PawCare
 
-PawCare is a full-stack pet care platform designed to help pet owners manage their pets' health information, discover care providers, and access helpful pet-care resources from one place.
+PawCare is a pet care platform designed to help pet owners manage their pets' health information, discover care providers, and access helpful pet-care resources from one place.
 
 The project was built to explore full-stack development with authentication, pet health records, provider discovery, REST APIs, deployment, and AI integration.
 
