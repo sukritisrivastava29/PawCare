@@ -10,7 +10,6 @@ export default function ProviderDetails() {
     (item) => item.id === Number(id)
   );
 
-  // Invalid provider ID
   if (!provider) {
     return (
       <div className="pawcare-app">
