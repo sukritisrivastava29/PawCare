@@ -1,16 +1,21 @@
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import ProviderCard from "../components/ProviderCard";
 import ServiceCard from "../components/ServiceCard";
 
-import { providers, services } from "../data/mockData";
+import { services } from "../data/mockData";
+import { getProviders } from "../services/api";
 
 export default function Search() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [location, setLocation] = useState("All");
+
+  const [providers, setProviders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -26,7 +31,6 @@ export default function Search() {
 
   const locations = ["All", "Gurgaon", "Delhi", "Noida"];
 
-  // Handle service card clicks
   useEffect(() => {
     if (!serviceId) return;
 
@@ -44,41 +48,33 @@ export default function Search() {
     }
   }, [serviceId]);
 
- const filteredProviders = useMemo(() => {
-  return providers.filter((provider) => {
-    const matchesQuery =
-      provider.name.toLowerCase().includes(query.toLowerCase()) ||
-      provider.type.toLowerCase().includes(query.toLowerCase()) ||
-      provider.location.toLowerCase().includes(query.toLowerCase());
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-    const matchesCategory =
-      category === "All" || provider.type === category;
+        const data = await getProviders({
+          search: query,
+          type: category,
+          location: location,
+          service: serviceId || "",
+        });
 
-    const matchesLocation =
-      location === "All" || provider.location === location;
+        setProviders(data.providers || []);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load care providers.");
+        setProviders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    let matchesService = true;
+    const timer = setTimeout(fetchProviders, 300);
 
-    if (serviceId) {
-      const serviceMap = {
-        "1": ["Veterinarian"],
-        "2": ["Veterinarian", "Emergency"],
-        "3": ["Rescue"],
-        "4": ["NGO"],
-      };
-
-      matchesService =
-        serviceMap[serviceId]?.includes(provider.type) ?? true;
-    }
-
-    return (
-      matchesQuery &&
-      matchesCategory &&
-      matchesLocation &&
-      matchesService
-    );
-  });
-}, [query, category, location, serviceId]);
+    return () => clearTimeout(timer);
+  }, [query, category, location, serviceId]);
 
   const clearFilters = () => {
     setQuery("");
@@ -92,8 +88,6 @@ export default function Search() {
       <Navbar />
 
       <main className="search-page">
-
-        {/* HERO */}
         <section className="search-hero">
           <div>
             <p className="eyebrow">FIND ANIMAL CARE</p>
@@ -111,8 +105,9 @@ export default function Search() {
           </div>
         </section>
 
-        {/* SEARCH */}
         <section className="search-container">
+
+          {/* SEARCH */}
 
           <div className="search-box">
             <span>⌕</span>
@@ -132,6 +127,7 @@ export default function Search() {
           </div>
 
           {/* FILTERS */}
+
           <div className="filter-row">
 
             <div className="filter-group">
@@ -141,9 +137,7 @@ export default function Search() {
                 {categories.map((item) => (
                   <button
                     key={item}
-                    className={
-                      category === item ? "selected" : ""
-                    }
+                    className={category === item ? "selected" : ""}
                     onClick={() => {
                       setCategory(item);
                       setSearchParams({});
@@ -160,9 +154,7 @@ export default function Search() {
 
               <select
                 value={location}
-                onChange={(e) =>
-                  setLocation(e.target.value)
-                }
+                onChange={(e) => setLocation(e.target.value)}
               >
                 {locations.map((item) => (
                   <option key={item}>{item}</option>
@@ -173,31 +165,71 @@ export default function Search() {
           </div>
 
           {/* RESULTS HEADER */}
+
           <div className="results-header">
             <div>
               <p className="eyebrow">CARE PROVIDERS</p>
 
               <h2>
-                {filteredProviders.length} places to get help
+                {loading
+                  ? "Finding care providers..."
+                  : `${providers.length} places to get help`}
               </h2>
             </div>
 
-            <span className="result-count">
-              {filteredProviders.length} results
-            </span>
+            {!loading && (
+              <span className="result-count">
+                {providers.length} results
+              </span>
+            )}
           </div>
 
+          {/* ERROR */}
+
+          {error && (
+            <div className="empty-results">
+              <div>⚠️</div>
+
+              <h3>Something went wrong</h3>
+
+              <p>{error}</p>
+
+              <button onClick={clearFilters}>
+                Clear filters
+              </button>
+            </div>
+          )}
+
+          {/* LOADING */}
+
+          {loading && !error && (
+            <div className="empty-results">
+              <div>🐾</div>
+
+              <h3>Finding care providers...</h3>
+
+              <p>
+                Searching our provider database.
+              </p>
+            </div>
+          )}
+
           {/* PROVIDERS */}
-          {filteredProviders.length > 0 ? (
+
+          {!loading && !error && providers.length > 0 && (
             <div className="provider-grid">
-              {filteredProviders.map((provider) => (
+              {providers.map((provider) => (
                 <ProviderCard
-                  key={provider.id}
+                  key={provider._id}
                   provider={provider}
                 />
               ))}
             </div>
-          ) : (
+          )}
+
+          {/* EMPTY */}
+
+          {!loading && !error && providers.length === 0 && (
             <div className="empty-results">
               <div>🐾</div>
 
@@ -212,12 +244,10 @@ export default function Search() {
               </button>
             </div>
           )}
-
         </section>
 
-        {/* SERVICES */}
-        <section className="services-section">
 
+        <section className="services-section">
           <div>
             <p className="eyebrow">
               WHAT DO YOU NEED?
@@ -234,9 +264,7 @@ export default function Search() {
               />
             ))}
           </div>
-
         </section>
-
       </main>
     </div>
   );
