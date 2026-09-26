@@ -10,7 +10,12 @@ const providerSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ["Veterinarian", "Emergency", "Rescue", "NGO"],
+      enum: [
+        "Veterinarian",
+        "Emergency",
+        "Rescue",
+        "NGO",
+      ],
       required: true,
     },
 
@@ -28,30 +33,22 @@ const providerSchema = new mongoose.Schema(
 
     phone: {
       type: String,
-      required: true,
       trim: true,
     },
 
-    rating: {
-      type: Number,
-      min: 0,
-      max: 5,
-      default: 0,
-    },
-
-    verified: {
-      type: Boolean,
-      default: false,
-    },
-
-    available: {
-      type: Boolean,
-      default: false,
+    website: {
+      type: String,
+      trim: true,
     },
 
     hours: {
       type: String,
       default: "",
+    },
+
+    services: {
+      type: [String],
+      default: [],
     },
 
     description: {
@@ -60,14 +57,27 @@ const providerSchema = new mongoose.Schema(
       trim: true,
     },
 
-    services: {
-      type: [String],
-      default: [],
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+
+    sourceUrl: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    lastVerifiedAt: {
+      type: Date,
+    },
+
+    available: {
+      type: Boolean,
+      default: false,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 providerSchema.index({
