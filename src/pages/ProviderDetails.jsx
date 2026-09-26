@@ -1,16 +1,38 @@
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import Navbar from "../components/Navbar";
-import { providers } from "../data/mockData";
+import { getProviderById } from "../services/api";
+
 import "./ProviderDetails.css";
 
 export default function ProviderDetails() {
   const { id } = useParams();
 
-  const provider = providers.find(
-    (item) => item.id === Number(id)
-  );
+  const [provider, setProvider] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  if (!provider) {
+  useEffect(() => {
+    const fetchProvider = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const data = await getProviderById(id);
+        setProvider(data);
+      } catch (err) {
+        console.error(err);
+        setError("We couldn't find the animal care provider you're looking for.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProvider();
+  }, [id]);
+
+  if (loading) {
     return (
       <div className="pawcare-app">
         <Navbar />
@@ -18,9 +40,28 @@ export default function ProviderDetails() {
         <main className="provider-details-page">
           <div className="provider-not-found">
             <div className="provider-paw">🐾</div>
+            <h1>Loading provider...</h1>
+            <p>Fetching provider information.</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !provider) {
+    return (
+      <div className="pawcare-app">
+        <Navbar />
+
+        <main className="provider-details-page">
+          <div className="provider-not-found">
+            <div className="provider-paw">🐾</div>
+
             <h1>Provider not found</h1>
+
             <p>
-              We couldn't find the animal care provider you're looking for.
+              {error ||
+                "We couldn't find the animal care provider you're looking for."}
             </p>
 
             <Link to="/search" className="back-button">
@@ -40,11 +81,13 @@ export default function ProviderDetails() {
         <div className="provider-details-container">
 
           {/* Back */}
+
           <Link to="/search" className="provider-back">
             ← Back to providers
           </Link>
 
           {/* Hero */}
+
           <section className="provider-details-hero">
             <div className="provider-details-icon">
               🐾
@@ -76,9 +119,11 @@ export default function ProviderDetails() {
           </section>
 
           {/* Main content */}
+
           <div className="provider-details-grid">
 
             {/* Left */}
+
             <section className="provider-main-info">
 
               <div className="provider-info-card">
@@ -90,7 +135,7 @@ export default function ProviderDetails() {
                 <h2>Services</h2>
 
                 <div className="services-list">
-                  {provider.services.map((service, index) => (
+                  {provider.services?.map((service, index) => (
                     <div
                       className="service-item"
                       key={index}
@@ -105,6 +150,7 @@ export default function ProviderDetails() {
             </section>
 
             {/* Right */}
+
             <aside className="provider-sidebar">
 
               <div className="provider-info-card">
@@ -112,6 +158,7 @@ export default function ProviderDetails() {
 
                 <div className="contact-item">
                   <span>📍</span>
+
                   <div>
                     <strong>Address</strong>
                     <p>{provider.address}</p>
@@ -120,6 +167,7 @@ export default function ProviderDetails() {
 
                 <div className="contact-item">
                   <span>📞</span>
+
                   <div>
                     <strong>Phone</strong>
                     <p>{provider.phone}</p>
@@ -128,6 +176,7 @@ export default function ProviderDetails() {
 
                 <div className="contact-item">
                   <span>🕐</span>
+
                   <div>
                     <strong>Hours</strong>
                     <p>{provider.hours}</p>
@@ -142,6 +191,7 @@ export default function ProviderDetails() {
                   }`}
                 >
                   <span>●</span>
+
                   {provider.available
                     ? "Currently available"
                     : "Currently unavailable"}
