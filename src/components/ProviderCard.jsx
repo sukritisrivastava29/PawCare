@@ -2,21 +2,9 @@ import { Link } from "react-router-dom";
 import "./ProviderCard.css";
 
 export default function ProviderCard({ provider }) {
-  {provider.phone && (
-  <a
-    href={`tel:${provider.phone}`}
-    className="search-provider-call"
-  >
-    Call
-  </a>
-)}
-
   return (
     <article className="search-provider-card">
-
-      <div className="search-provider-paw">
-        🐾
-      </div>
+      <div className="search-provider-paw">🐾</div>
 
       <span className="search-provider-type">
         {provider.type}
@@ -30,28 +18,29 @@ export default function ProviderCard({ provider }) {
         📍 {provider.location}
       </p>
 
-      <div className="search-provider-rating">
-        ★ {provider.rating}
-      </div>
+      {provider.rating && (
+        <div className="search-provider-rating">
+          ★ {provider.rating}
+        </div>
+      )}
 
       <div className="search-provider-actions">
-
         <Link
-         to={`/provider/${provider._id}`}
+          to={`/provider/${provider._id}`}
           className="search-provider-view"
         >
           View details
         </Link>
 
-        <a
-          href={`tel:${phone}`}
-          className="search-provider-call"
-        >
-          Call
-        </a>
-
+        {provider.phone && (
+          <a
+            href={`tel:${provider.phone}`}
+            className="search-provider-call"
+          >
+            Call
+          </a>
+        )}
       </div>
-
     </article>
   );
 }
