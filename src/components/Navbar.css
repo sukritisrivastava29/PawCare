@@ -1,217 +1,371 @@
-/* =========================================
-   PAWCARE HEADER NAVBAR
-========================================= */
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   width: 100%;
-  height: 88px;
-  padding: 0 7%;
-  box-sizing: border-box;
+  background: #f7f5ef;
+  border-bottom: 1px solid #e5e1d8;
+}
 
-  background: #f8f5ed;
+.navbar-inner {
+  width: min(1200px, calc(100% - 48px));
+  min-height: 76px;
+  margin: 0 auto;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  border-bottom: 1px solid rgba(15, 87, 83, 0.08);
-
-  position: relative;
-  z-index: 1000;
+  gap: 28px;
 }
 
-/* =========================================
+/* =========================
    LOGO
-========================================= */
+========================= */
 
 .logo {
-  text-decoration: none;
-
-  font-family: Georgia, serif;
-  font-size: 30px;
-  font-weight: 700;
-
-  color: #176f6b;
-
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
+
+  color: #176f6b;
+  text-decoration: none;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+
+  white-space: nowrap;
 }
 
-.logo span:not(.logo-paw) {
-  color: #f47f68;
+.logo span:last-child {
+  color: #e87959;
 }
 
 .logo-paw {
-  color: #f47f68;
-  font-family: Arial, sans-serif;
-  font-size: 25px;
+  color: #e87959;
+  font-family: "DM Sans", sans-serif;
+  font-size: 17px;
+  margin-right: 2px;
 }
 
-/* =========================================
-   NAVIGATION
-========================================= */
+/* =========================
+   DESKTOP NAV
+========================= */
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 38px;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
 }
 
 .nav-links a {
+  position: relative;
+
+  padding: 9px 12px;
+
+  color: #625f58;
   text-decoration: none;
 
-  color: #073f3d;
-
-  font-size: 15px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
   font-weight: 600;
 
-  transition: color 0.2s ease;
+  border-radius: 8px;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
 }
 
 .nav-links a:hover {
-  color: #f47f68;
+  color: #176f6b;
+  background: #eeece5;
 }
 
 .nav-links a.active {
-  color: #f47f68;
+  color: #176f6b;
+  background: #e9efec;
 }
 
-/* =========================================
-   RIGHT SIDE
-========================================= */
+/* =========================
+   ACTIONS
+========================= */
 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 9px;
 }
 
-/* =========================================
-   LOGOUT
-========================================= */
-
+.login-nav-btn,
 .logout-btn {
-  border: 1px solid #176f6b;
-  background: transparent;
+  padding: 10px 15px;
 
+  border: 1px solid #176f6b;
+  border-radius: 9px;
+
+  background: transparent;
   color: #176f6b;
 
-  padding: 11px 19px;
-  border-radius: 10px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
 
-  font-size: 14px;
-  font-weight: 600;
-
+  text-decoration: none;
   cursor: pointer;
 
   transition: all 0.2s ease;
 }
 
+.login-nav-btn:hover,
 .logout-btn:hover {
   background: #176f6b;
   color: white;
 }
 
-/* =========================================
-   LOGIN
-========================================= */
-
-.login-nav-btn {
-  text-decoration: none;
-
-  border: 1px solid #176f6b;
-
-  color: #176f6b;
-
-  padding: 11px 19px;
-  border-radius: 10px;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  transition: all 0.2s ease;
-}
-
-.login-nav-btn:hover {
-  background: #176f6b;
-  color: white;
-}
-
-/* =========================================
-   EMERGENCY
-========================================= */
-
 .emergency-nav {
-  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
-  background: #f58268;
+  padding: 11px 16px;
+
+  border-radius: 9px;
+
+  background: #f48668;
   color: white;
 
-  padding: 13px 22px;
-  border-radius: 10px;
-
-  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
   font-weight: 700;
 
-  transition: all 0.2s ease;
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .emergency-nav:hover {
-  background: #e96f55;
+  background: #e9785b;
   transform: translateY(-1px);
+}
+
+.emergency-nav span {
+  font-size: 11px;
+}
+
+/* =========================
+   MOBILE MENU BUTTON
+========================= */
+
+.menu-toggle {
+  display: none;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 9px;
+
+  border: 1px solid #ddd8ce;
+  border-radius: 9px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+.menu-toggle span {
+  display: block;
+
+  width: 20px;
+  height: 2px;
+
+  margin: 0 auto;
+
+  background: #176f6b;
+  border-radius: 10px;
+
+  transition: all 0.2s ease;
+}
+
+.menu-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+.mobile-menu {
+  display: none;
 }
 
 /* =========================================
    MOBILE
 ========================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 700px) {
   .navbar {
-    padding: 0 4%;
-  }
-
-  .nav-links {
-    gap: 18px;
-  }
-
-  .nav-links a {
-    font-size: 13px;
+    height: 70px;
+    padding: 0 20px;
+    position: relative;
   }
 
   .logo {
-    font-size: 25px;
+    font-size: 24px;
   }
 
-  .emergency-nav {
-    padding: 11px 15px;
+  .logo-paw {
+    font-size: 19px;
   }
-}
 
-@media (max-width: 700px) {
-  .nav-links {
+  .nav-links,
+  .nav-actions {
     display: none;
   }
 
+  .menu-toggle {
+    display: flex;
+  }
+
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    width: 100%;
+
+    display: block;
+
+    background: #f8f5ed;
+
+    border-top: 1px solid rgba(15, 87, 83, 0.08);
+    border-bottom: 1px solid rgba(15, 87, 83, 0.08);
+
+    box-sizing: border-box;
+
+    max-height: 0;
+    overflow: hidden;
+
+    opacity: 0;
+
+    transition:
+      max-height 0.3s ease,
+      opacity 0.2s ease;
+  }
+
+  .mobile-menu.show {
+    max-height: 600px;
+    opacity: 1;
+  }
+
+  .mobile-nav-links {
+    padding: 8px 20px 0;
+  }
+
+  .mobile-nav-links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 15px 4px;
+
+    border-bottom: 1px solid #e7e2d8;
+
+    color: #073f3d;
+    text-decoration: none;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .mobile-nav-links a.active {
+    color: #f47f68;
+  }
+
+  .mobile-arrow {
+    color: #aaa49b;
+    font-size: 16px;
+  }
+
+  .mobile-actions {
+    display: grid;
+    gap: 10px;
+
+    padding: 16px 20px 22px;
+  }
+
+  .mobile-emergency,
+  .mobile-login,
+  .mobile-logout {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    text-align: center;
+    text-decoration: none;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+  }
+
+  .mobile-emergency {
+    background: #f58268;
+    color: white;
+  }
+
+  .mobile-login,
+  .mobile-logout {
+    border: 1px solid #176f6b;
+    background: transparent;
+    color: #176f6b;
+  }
+}
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-width: 400px) {
   .navbar {
-    height: 76px;
+    padding: 0 14px;
   }
 
   .logo {
-    font-size: 25px;
+    font-size: 21px;
   }
 
-  .nav-actions {
-    gap: 8px;
-  }
-
-  .logout-btn,
-  .login-nav-btn {
-    padding: 9px 13px;
-  }
-
-  .emergency-nav {
-    padding: 10px 13px;
-    font-size: 13px;
+  .logo-paw {
+    font-size: 17px;
   }
 }
