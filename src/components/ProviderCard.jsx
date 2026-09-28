@@ -2,7 +2,14 @@ import { Link } from "react-router-dom";
 import "./ProviderCard.css";
 
 export default function ProviderCard({ provider }) {
-  const phone = provider.phone || "+91 98765 43210";
+  {provider.phone && (
+  <a
+    href={`tel:${provider.phone}`}
+    className="search-provider-call"
+  >
+    Call
+  </a>
+)}
 
   return (
     <article className="search-provider-card">
@@ -30,7 +37,7 @@ export default function ProviderCard({ provider }) {
       <div className="search-provider-actions">
 
         <Link
-          to={`/provider/${provider.id}`}
+         to={`/provider/${provider._id}`}
           className="search-provider-view"
         >
           View details

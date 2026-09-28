@@ -305,10 +305,9 @@
    ========================================= */
 
 .provider-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 23px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .call-provider,

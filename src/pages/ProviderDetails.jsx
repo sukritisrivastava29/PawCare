@@ -1,9 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import Navbar from "../components/Navbar";
 import { getProviderById } from "../services/api";
-
 import "./ProviderDetails.css";
 
 export default function ProviderDetails() {
@@ -23,7 +21,9 @@ export default function ProviderDetails() {
         setProvider(data);
       } catch (err) {
         console.error(err);
-        setError("We couldn't find the animal care provider you're looking for.");
+        setError(
+          "We couldn't find the animal care provider you're looking for."
+        );
       } finally {
         setLoading(false);
       }
@@ -73,6 +73,12 @@ export default function ProviderDetails() {
     );
   }
 
+  const mapsUrl = provider.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        provider.address
+      )}`
+    : null;
+
   return (
     <div className="pawcare-app">
       <Navbar />
@@ -80,18 +86,12 @@ export default function ProviderDetails() {
       <main className="provider-details-page">
         <div className="provider-details-container">
 
-          {/* Back */}
-
           <Link to="/search" className="provider-back">
             ← Back to providers
           </Link>
 
-          {/* Hero */}
-
           <section className="provider-details-hero">
-            <div className="provider-details-icon">
-              🐾
-            </div>
+            <div className="provider-details-icon">🐾</div>
 
             <div className="provider-details-heading">
               <div className="provider-type-row">
@@ -112,100 +112,131 @@ export default function ProviderDetails() {
                 📍 {provider.location}
               </p>
 
-              <div className="provider-rating">
-                <span>★</span> {provider.rating}
-              </div>
+              {provider.rating && (
+                <div className="provider-rating">
+                  <span>★</span> {provider.rating}
+                </div>
+              )}
             </div>
           </section>
 
-          {/* Main content */}
-
           <div className="provider-details-grid">
-
-            {/* Left */}
 
             <section className="provider-main-info">
 
               <div className="provider-info-card">
                 <h2>About</h2>
-                <p>{provider.description}</p>
+
+                <p>
+                  {provider.description ||
+                    "Contact this provider for more information about their animal care services."}
+                </p>
               </div>
 
               <div className="provider-info-card">
                 <h2>Services</h2>
 
-                <div className="services-list">
-                  {provider.services?.map((service, index) => (
-                    <div
-                      className="service-item"
-                      key={index}
-                    >
-                      <span>✓</span>
-                      {service}
-                    </div>
-                  ))}
-                </div>
+                {provider.services?.length > 0 ? (
+                  <div className="services-list">
+                    {provider.services.map((service, index) => (
+                      <div className="service-item" key={index}>
+                        <span>✓</span>
+                        {service}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>
+                    Contact the provider for available services.
+                  </p>
+                )}
               </div>
 
             </section>
 
-            {/* Right */}
-
             <aside className="provider-sidebar">
 
               <div className="provider-info-card">
+
                 <h2>Contact & Hours</h2>
 
-                <div className="contact-item">
-                  <span>📍</span>
+                {provider.address && (
+                  <div className="contact-item">
+                    <span>📍</span>
 
-                  <div>
-                    <strong>Address</strong>
-                    <p>{provider.address}</p>
+                    <div>
+                      <strong>Address</strong>
+                      <p>{provider.address}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="contact-item">
-                  <span>📞</span>
+                {provider.phone && (
+                  <div className="contact-item">
+                    <span>📞</span>
 
-                  <div>
-                    <strong>Phone</strong>
-                    <p>{provider.phone}</p>
+                    <div>
+                      <strong>Phone</strong>
+                      <p>{provider.phone}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="contact-item">
-                  <span>🕐</span>
+                {provider.hours && (
+                  <div className="contact-item">
+                    <span>🕐</span>
 
-                  <div>
-                    <strong>Hours</strong>
-                    <p>{provider.hours}</p>
+                    <div>
+                      <strong>Hours</strong>
+                      <p>{provider.hours}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div
-                  className={`availability ${
-                    provider.available
-                      ? "available"
-                      : "unavailable"
-                  }`}
-                >
+                <div className="availability">
                   <span>●</span>
-
-                  {provider.available
-                    ? "Currently available"
-                    : "Currently unavailable"}
+                  Contact provider for current availability
                 </div>
 
-                <a
-                  href={`tel:${provider.phone}`}
-                  className="call-provider-button"
-                >
-                  📞 Call provider
-                </a>
+                <div className="provider-action-buttons">
+
+                  {provider.phone && (
+                    <a
+                      href={`tel:${provider.phone}`}
+                      className="call-provider-button"
+                    >
+                      📞 Call provider
+                    </a>
+                  )}
+
+                  {mapsUrl && (
+                    <a
+                      href={mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="call-provider-button"
+                    >
+                      📍 Get directions
+                    </a>
+                  )}
+
+                  {provider.website && (
+                    <a
+                      href={provider.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="call-provider-button"
+                    >
+                      🌐 Visit website
+                    </a>
+                  )}
+
+                </div>
+
               </div>
 
             </aside>
+
           </div>
         </div>
       </main>
