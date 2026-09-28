@@ -21,70 +21,78 @@ function Login() {
       [e.target.name]: e.target.value,
     }));
   };
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
 
-  // Password validation
-  if (form.password.length < 8) {
-    setError("Password must be at least 8 characters long.");
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: form.email.trim(),
-        password: form.password,
-      }),
+  const handleDemoLogin = () => {
+    setForm({
+      email: "demo@pawcare.com",
+      password: "PawCare@123",
     });
 
-    const data = await response.json();
+    setError("");
+  };
 
-    if (!response.ok) {
-      setError(data.message || "Invalid email or password.");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters long.");
       return;
     }
 
-    if (!data.token) {
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email.trim(),
+          password: form.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Invalid email or password.");
+        return;
+      }
+
+      if (!data.token) {
+        setError(
+          "Login succeeded, but no authentication token was received."
+        );
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      navigate("/animals", { replace: true });
+    } catch (error) {
+      console.error("Login error:", error);
+
       setError(
-        "Login succeeded, but no authentication token was received."
+        "Unable to connect to PawCare. Make sure the backend is running."
       );
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    localStorage.setItem("token", data.token);
-
-    if (data.user) {
-      localStorage.setItem("user", JSON.stringify(data.user));
-    }
-
-    navigate("/animals", { replace: true });
-  } catch (error) {
-    console.error("Login error:", error);
-
-    setError(
-      "Unable to connect to PawCare. Make sure the backend is running."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="login-page">
-
       {/* LEFT VISUAL */}
       <section className="login-visual">
-
         <Link to="/" className="login-brand">
           <span className="brand-star">✦</span>
+
           <span>
             Paw<span>Care</span>
           </span>
@@ -123,14 +131,11 @@ const handleSubmit = async (e) => {
         <p className="visual-footer">
           For pet parents & rescuers
         </p>
-
       </section>
 
       {/* RIGHT FORM */}
       <section className="login-form-section">
-
         <div className="login-form-wrapper">
-
           {/* Mobile logo */}
           <Link to="/" className="mobile-brand">
             <span>✦</span> Paw<span>Care</span>
@@ -156,7 +161,6 @@ const handleSubmit = async (e) => {
           )}
 
           <form onSubmit={handleSubmit}>
-
             {/* EMAIL */}
             <div className="input-group">
               <label htmlFor="email">
@@ -177,7 +181,6 @@ const handleSubmit = async (e) => {
 
             {/* PASSWORD */}
             <div className="input-group">
-
               <div className="password-label">
                 <label htmlFor="password">
                   Password
@@ -195,14 +198,16 @@ const handleSubmit = async (e) => {
               </div>
 
               <input
-  type="password"
-  name="password"
-  value={form.password}
-  onChange={handleChange}
-  placeholder="Enter your password"
-  minLength={8}
-  required
-/>
+                id="password"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                minLength={8}
+                autoComplete="current-password"
+                required
+              />
             </div>
 
             {/* LOGIN BUTTON */}
@@ -217,8 +222,42 @@ const handleSubmit = async (e) => {
 
               {!loading && <span>→</span>}
             </button>
-
           </form>
+
+          {/* DEMO ACCOUNT */}
+          <div className="demo-account">
+            <div className="demo-account-header">
+              <span>✦</span>
+
+              <div>
+                <strong>Try PawCare</strong>
+
+                <p>
+                  Explore the app with our demo account.
+                </p>
+              </div>
+            </div>
+
+            <div className="demo-credentials">
+              <div>
+                <span>Email</span>
+                <strong>demo@pawcare.com</strong>
+              </div>
+
+              <div>
+                <span>Password</span>
+                <strong>PawCare@123</strong>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="demo-button"
+              onClick={handleDemoLogin}
+            >
+              Use demo account →
+            </button>
+          </div>
 
           {/* REGISTER FLOW */}
           <div className="login-divider">
@@ -237,11 +276,8 @@ const handleSubmit = async (e) => {
           <p className="login-footer">
             PawCare · Animal care made simpler
           </p>
-
         </div>
-
       </section>
-
     </div>
   );
 }
