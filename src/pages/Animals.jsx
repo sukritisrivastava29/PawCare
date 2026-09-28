@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import "./Animals.css";
 import Navbar from "../components/Navbar";
-const API_URL = "https://pawcare-backend-vswt.onrender.com/api";
+import {
+  getMyAnimals,
+  createAnimal,
+  updateAnimal,
+  deleteAnimal,
+} from "../services/api";
 
 const initialForm = {
   name: "",
@@ -25,26 +30,11 @@ function Animals() {
 
   const token = localStorage.getItem("token");
 
-  const authHeaders = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-
   const fetchAnimals = async () => {
     try {
       setError("");
 
-      const response = await fetch(`${API_URL}/animals`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to load animals");
-      }
+      const data = await getMyAnimals();
 
       setAnimals(data.animals || []);
     } catch (error) {
@@ -89,26 +79,9 @@ function Animals() {
         weight: form.weight ? Number(form.weight) : undefined,
       };
 
-      const url = editingId
-        ? `${API_URL}/animals/${editingId}`
-        : `${API_URL}/animals`;
-
-      const method = editingId ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: authHeaders,
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-            `Failed to ${editingId ? "update" : "create"} animal`
-        );
-      }
+      const data = editingId
+        ? await updateAnimal(editingId, payload)
+        : await createAnimal(payload);
 
       if (editingId) {
         setAnimals((prev) =>
@@ -160,18 +133,7 @@ function Animals() {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`${API_URL}/animals/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete animal");
-      }
+      await deleteAnimal(id);
 
       setAnimals((prev) =>
         prev.filter((animal) => animal._id !== id)
@@ -191,6 +153,7 @@ function Animals() {
     setEditingId(null);
     setForm(initialForm);
   };
+
   const getAnimalIcon = (species) => {
     const icons = {
       dog: "🐶",
@@ -225,383 +188,365 @@ function Animals() {
     );
   }
 
- return (
-  <div className="pawcare-app">
-    <Navbar />
+  return (
+    <div className="pawcare-app">
+      <Navbar />
 
-    <main className="animals-page">
-
-      <section className="animals-header">
-        <div>
-          <span className="section-label">PET CARE · PROFILES</span>
-
-          <h1>
-            Your animals,
-            <span> cared for.</span>
-          </h1>
-
-          <p>
-            Keep all your pets' information, health details and
-            medical notes in one place.
-          </p>
-        </div>
-
-        <div className="animal-count">
-          <strong>{animals.length}</strong>
-          <span>
-            {animals.length === 1 ? "Animal" : "Animals"}
-            <br />
-            registered
-          </span>
-        </div>
-      </section>
-
-      {error && (
-        <div className="animals-error">
-          <span>!</span>
-          <p>{error}</p>
-        </div>
-      )}
-
-      <section className="animal-form-card">
-
-        <div className="form-heading">
-          <div className="form-icon">
-            {editingId ? "✎" : "+"}
-          </div>
-
+      <main className="animals-page">
+        <section className="animals-header">
           <div>
-            <h2>
-              {editingId ? "Edit animal" : "Add an animal"}
-            </h2>
-
-            <p>
-              {editingId
-                ? "Update your pet's information."
-                : "Create a profile for your pet."}
-            </p>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-
-          <div className="form-grid">
-
-            <div className="input-group">
-              <label>Animal name</label>
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="e.g. Bruno"
-                required
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Species</label>
-              <select
-                name="species"
-                value={form.species}
-                onChange={handleChange}
-              >
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
-                <option value="rabbit">Rabbit</option>
-                <option value="bird">Bird</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div className="input-group">
-              <label>Breed</label>
-              <input
-                name="breed"
-                value={form.breed}
-                onChange={handleChange}
-                placeholder="e.g. Golden Retriever"
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Gender</label>
-              <select
-                name="gender"
-                value={form.gender}
-                onChange={handleChange}
-              >
-                <option value="unknown">Not specified</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-
-            <div className="input-group">
-              <label>Age</label>
-              <input
-                name="age"
-                type="number"
-                min="0"
-                value={form.age}
-                onChange={handleChange}
-                placeholder="Years"
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Weight</label>
-              <input
-                name="weight"
-                type="number"
-                min="0"
-                step="0.1"
-                value={form.weight}
-                onChange={handleChange}
-                placeholder="Weight in kg"
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Health status</label>
-              <select
-                name="healthStatus"
-                value={form.healthStatus}
-                onChange={handleChange}
-              >
-                <option value="healthy">Healthy</option>
-                <option value="needs-attention">
-                  Needs attention
-                </option>
-                <option value="under-treatment">
-                  Under treatment
-                </option>
-              </select>
-            </div>
-
-            <div className="input-group">
-              <label>Vaccination</label>
-              <select
-                name="vaccinationStatus"
-                value={form.vaccinationStatus}
-                onChange={handleChange}
-              >
-                <option value="up-to-date">
-                  Up to date
-                </option>
-                <option value="due">
-                  Vaccination due
-                </option>
-                <option value="unknown">
-                  Unknown
-                </option>
-              </select>
-            </div>
-
-            <div className="input-group full-width">
-              <label>Medical notes</label>
-
-              <textarea
-                name="medicalNotes"
-                value={form.medicalNotes}
-                onChange={handleChange}
-                placeholder="Add allergies, medication, medical history..."
-                rows="4"
-              />
-            </div>
-
-          </div>
-
-          <div className="form-actions">
-
-            {editingId && (
-              <button
-                type="button"
-                className="cancel-button"
-                onClick={cancelEdit}
-              >
-                Cancel
-              </button>
-            )}
-
-            <button
-              type="submit"
-              className="save-button"
-              disabled={saving}
-            >
-              {saving
-                ? "Saving..."
-                : editingId
-                ? "Save changes"
-                : "Add animal"}
-            </button>
-
-          </div>
-
-        </form>
-      </section>
-
-      {/* ANIMALS */}
-      <section className="animals-list-section">
-
-        <div className="list-heading">
-          <div>
-            <span className="section-label">MY PETS</span>
-
-            <h2>
-              {animals.length > 0
-                ? "Your animals"
-                : "No animals yet"}
-            </h2>
-          </div>
-
-          {animals.length > 0 && (
-            <span className="list-total">
-              {animals.length} profiles
+            <span className="section-label">
+              PET CARE · PROFILES
             </span>
-          )}
-        </div>
 
-        {animals.length === 0 ? (
-          <div className="empty-animals">
-            <div className="empty-icon">🐾</div>
-
-            <h3>Your pet profiles will appear here</h3>
+            <h1>
+              Your animals,
+              <span> cared for.</span>
+            </h1>
 
             <p>
-              Add your first animal above to start keeping
-              their care information organized.
+              Keep all your pets' information, health details and
+              medical notes in one place.
             </p>
           </div>
-        ) : (
-          <div className="animal-grid">
 
-            {animals.map((animal) => (
-              <article
-                className="animal-card"
-                key={animal._id}
-              >
+          <div className="animal-count">
+            <strong>{animals.length}</strong>
+            <span>
+              {animals.length === 1 ? "Animal" : "Animals"}
+              <br />
+              registered
+            </span>
+          </div>
+        </section>
 
-                {/* CARD TOP */}
-                <div className="animal-card-top">
-
-                  <div className="animal-avatar">
-                    {getAnimalIcon(animal.species)}
-                  </div>
-
-                  <div className="animal-actions">
-
-                    <button
-                      className="icon-button edit"
-                      onClick={() => handleEdit(animal)}
-                      title="Edit"
-                    >
-                      ✎
-                    </button>
-
-                    <button
-                      className="icon-button delete"
-                      onClick={() =>
-                        handleDelete(animal._id)
-                      }
-                      title="Delete"
-                    >
-                      ×
-                    </button>
-
-                  </div>
-
-                </div>
-
-                {/* NAME */}
-                <div className="animal-info">
-
-                  <h3>{animal.name}</h3>
-
-                  <p className="animal-breed">
-                    {formatStatus(animal.species)}
-                    {animal.breed && ` · ${animal.breed}`}
-                  </p>
-
-                </div>
-
-                {/* STATUS */}
-                <div className="status-row">
-
-                  <span
-                    className={`status-badge health ${animal.healthStatus}`}
-                  >
-                    <span className="status-dot"></span>
-                    {formatStatus(animal.healthStatus)}
-                  </span>
-
-                  <span
-                    className={`status-badge vaccination ${animal.vaccinationStatus}`}
-                  >
-                    {animal.vaccinationStatus ===
-                    "up-to-date"
-                      ? "✓"
-                      : "!"}{" "}
-                    {formatStatus(
-                      animal.vaccinationStatus
-                    )}
-                  </span>
-
-                </div>
-
-                {/* DETAILS */}
-                <div className="animal-details">
-
-                  <div className="detail-item">
-                    <span>AGE</span>
-                    <strong>
-                      {animal.age ?? "—"}
-                      {animal.age != null && " yrs"}
-                    </strong>
-                  </div>
-
-                  <div className="detail-item">
-                    <span>WEIGHT</span>
-                    <strong>
-                      {animal.weight ?? "—"}
-                      {animal.weight != null && " kg"}
-                    </strong>
-                  </div>
-
-                  <div className="detail-item">
-                    <span>GENDER</span>
-                    <strong>
-                      {formatStatus(animal.gender)}
-                    </strong>
-                  </div>
-
-                </div>
-
-                {/* NOTES */}
-                {animal.medicalNotes && (
-                  <div className="medical-notes">
-                    <span>MEDICAL NOTES</span>
-                    <p>{animal.medicalNotes}</p>
-                  </div>
-                )}
-
-                {/* FOOTER */}
-                <div className="animal-card-footer">
-                  <button
-                    onClick={() => handleEdit(animal)}
-                  >
-                    View & edit profile
-                    <span>→</span>
-                  </button>
-                </div>
-
-              </article>
-            ))}
-
+        {error && (
+          <div className="animals-error">
+            <span>!</span>
+            <p>{error}</p>
           </div>
         )}
 
-      </section>
-</main>
+        <section className="animal-form-card">
+          <div className="form-heading">
+            <div className="form-icon">
+              {editingId ? "✎" : "+"}
+            </div>
+
+            <div>
+              <h2>
+                {editingId ? "Edit animal" : "Add an animal"}
+              </h2>
+
+              <p>
+                {editingId
+                  ? "Update your pet's information."
+                  : "Create a profile for your pet."}
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-grid">
+              <div className="input-group">
+                <label>Animal name</label>
+
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Bruno"
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Species</label>
+
+                <select
+                  name="species"
+                  value={form.species}
+                  onChange={handleChange}
+                >
+                  <option value="dog">Dog</option>
+                  <option value="cat">Cat</option>
+                  <option value="rabbit">Rabbit</option>
+                  <option value="bird">Bird</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Breed</label>
+
+                <input
+                  name="breed"
+                  value={form.breed}
+                  onChange={handleChange}
+                  placeholder="e.g. Golden Retriever"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Gender</label>
+
+                <select
+                  name="gender"
+                  value={form.gender}
+                  onChange={handleChange}
+                >
+                  <option value="unknown">Not specified</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Age</label>
+
+                <input
+                  name="age"
+                  type="number"
+                  min="0"
+                  value={form.age}
+                  onChange={handleChange}
+                  placeholder="Years"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Weight</label>
+
+                <input
+                  name="weight"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  value={form.weight}
+                  onChange={handleChange}
+                  placeholder="Weight in kg"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Health status</label>
+
+                <select
+                  name="healthStatus"
+                  value={form.healthStatus}
+                  onChange={handleChange}
+                >
+                  <option value="healthy">Healthy</option>
+                  <option value="needs-attention">
+                    Needs attention
+                  </option>
+                  <option value="under-treatment">
+                    Under treatment
+                  </option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Vaccination</label>
+
+                <select
+                  name="vaccinationStatus"
+                  value={form.vaccinationStatus}
+                  onChange={handleChange}
+                >
+                  <option value="up-to-date">
+                    Up to date
+                  </option>
+                  <option value="due">
+                    Vaccination due
+                  </option>
+                  <option value="unknown">
+                    Unknown
+                  </option>
+                </select>
+              </div>
+
+              <div className="input-group full-width">
+                <label>Medical notes</label>
+
+                <textarea
+                  name="medicalNotes"
+                  value={form.medicalNotes}
+                  onChange={handleChange}
+                  placeholder="Add allergies, medication, medical history..."
+                  rows="4"
+                />
+              </div>
+            </div>
+
+            <div className="form-actions">
+              {editingId && (
+                <button
+                  type="button"
+                  className="cancel-button"
+                  onClick={cancelEdit}
+                >
+                  Cancel
+                </button>
+              )}
+
+              <button
+                type="submit"
+                className="save-button"
+                disabled={saving}
+              >
+                {saving
+                  ? "Saving..."
+                  : editingId
+                  ? "Save changes"
+                  : "Add animal"}
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section className="animals-list-section">
+          <div className="list-heading">
+            <div>
+              <span className="section-label">MY PETS</span>
+
+              <h2>
+                {animals.length > 0
+                  ? "Your animals"
+                  : "No animals yet"}
+              </h2>
+            </div>
+
+            {animals.length > 0 && (
+              <span className="list-total">
+                {animals.length} profiles
+              </span>
+            )}
+          </div>
+
+          {animals.length === 0 ? (
+            <div className="empty-animals">
+              <div className="empty-icon">🐾</div>
+
+              <h3>Your pet profiles will appear here</h3>
+
+              <p>
+                Add your first animal above to start keeping
+                their care information organized.
+              </p>
+            </div>
+          ) : (
+            <div className="animal-grid">
+              {animals.map((animal) => (
+                <article
+                  className="animal-card"
+                  key={animal._id}
+                >
+                  <div className="animal-card-top">
+                    <div className="animal-avatar">
+                      {getAnimalIcon(animal.species)}
+                    </div>
+
+                    <div className="animal-actions">
+                      <button
+                        className="icon-button edit"
+                        onClick={() => handleEdit(animal)}
+                        title="Edit"
+                      >
+                        ✎
+                      </button>
+
+                      <button
+                        className="icon-button delete"
+                        onClick={() =>
+                          handleDelete(animal._id)
+                        }
+                        title="Delete"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="animal-info">
+                    <h3>{animal.name}</h3>
+
+                    <p className="animal-breed">
+                      {formatStatus(animal.species)}
+                      {animal.breed && ` · ${animal.breed}`}
+                    </p>
+                  </div>
+
+                  <div className="status-row">
+                    <span
+                      className={`status-badge health ${animal.healthStatus}`}
+                    >
+                      <span className="status-dot"></span>
+                      {formatStatus(animal.healthStatus)}
+                    </span>
+
+                    <span
+                      className={`status-badge vaccination ${animal.vaccinationStatus}`}
+                    >
+                      {animal.vaccinationStatus ===
+                      "up-to-date"
+                        ? "✓"
+                        : "!"}{" "}
+                      {formatStatus(
+                        animal.vaccinationStatus
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="animal-details">
+                    <div className="detail-item">
+                      <span>AGE</span>
+
+                      <strong>
+                        {animal.age ?? "—"}
+                        {animal.age != null && " yrs"}
+                      </strong>
+                    </div>
+
+                    <div className="detail-item">
+                      <span>WEIGHT</span>
+
+                      <strong>
+                        {animal.weight ?? "—"}
+                        {animal.weight != null && " kg"}
+                      </strong>
+                    </div>
+
+                    <div className="detail-item">
+                      <span>GENDER</span>
+
+                      <strong>
+                        {formatStatus(animal.gender)}
+                      </strong>
+                    </div>
+                  </div>
+
+                  {animal.medicalNotes && (
+                    <div className="medical-notes">
+                      <span>MEDICAL NOTES</span>
+                      <p>{animal.medicalNotes}</p>
+                    </div>
+                  )}
+
+                  <div className="animal-card-footer">
+                    <button
+                      onClick={() => handleEdit(animal)}
+                    >
+                      View & edit profile
+                      <span>→</span>
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 }
